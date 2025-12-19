@@ -1,0 +1,79 @@
+[
+  {
+    "name": "pdm-project/pdm",
+    "url": "https://github.com/pdm-project/pdm",
+    "repo_creation_date": "2019-12-27T03:50:57Z",
+    "data_collection_timestamp": "2025-12-19T20:43:05Z",
+    "commits_number": 3185,
+    "stars_number": 8534,
+    "releases_number": 238,
+    "contributors_number": 236,
+    "notes": ""
+  },
+  {
+    "name": "pypa/pip-audit",
+    "url": "https://github.com/pypa/pip-audit",
+    "repo_creation_date": "2021-09-02T15:19:39Z",
+    "data_collection_timestamp": "2025-12-19T20:43:32Z",
+    "commits_number": 790,
+    "stars_number": 1156,
+    "releases_number": 62,
+    "contributors_number": 37,
+    "notes": ""
+  },
+  {
+    "name": "python-poetry/poetry-plugin-export",
+    "url": "https://github.com/python-poetry/poetry-plugin-export",
+    "repo_creation_date": "2021-05-21T15:29:52Z",
+    "data_collection_timestamp": "2025-12-19T20:47:05Z",
+    "commits_number": 218,
+    "stars_number": 327,
+    "releases_number": 23,
+    "contributors_number": 34,
+    "notes": ""
+  },
+  {
+    "name": "pypa/hatch",
+    "url": "https://github.com/pypa/hatch",
+    "repo_creation_date": "2017-05-31T23:37:53Z",
+    "data_collection_timestamp": "2025-12-19T20:48:31Z",
+    "commits_number": 1028,
+    "stars_number": 7036,
+    "releases_number": 140,
+    "contributors_number": 89,
+    "notes": ""
+  },
+  {
+    "name": "pypa/build",
+    "url": "https://github.com/pypa/build",
+    "repo_creation_date": "2020-05-10T16:20:46Z",
+    "data_collection_timestamp": "2025-12-19T20:48:44Z",
+    "commits_number": 917,
+    "stars_number": 822,
+    "releases_number": 9,
+    "contributors_number": 57,
+    "notes": ""
+  },
+  {
+    "name": "tox-dev/pipdeptree",
+    "url": "https://github.com/tox-dev/pipdeptree",
+    "repo_creation_date": "2014-02-02T17:45:23Z",
+    "data_collection_timestamp": "2025-12-19T20:49:05Z",
+    "commits_number": 582,
+    "stars_number": 2964,
+    "releases_number": 55,
+    "contributors_number": 50,
+    "notes": ""
+  },
+  {
+    "name": "pypa/twine",
+    "url": "https://github.com/pypa/twine",
+    "repo_creation_date": "2013-08-13T15:39:39Z",
+    "data_collection_timestamp": "2025-12-19T20:49:24Z",
+    "commits_number": 1355,
+    "stars_number": 1744,
+    "releases_number": 16,
+    "contributors_number": 131,
+    "notes": ""
+  }
+]
