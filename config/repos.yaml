@@ -17,7 +17,7 @@ dataset:
       end_year: 2029
 
 # Default snapshot policy for the selected repos
-# Currently set to fixed_age of 2 years after the first commit
+# Currently set to a fixed age of 2 years after the first commit
 default_snapshot:
   policy: "fixed_age"
   fixed_age_years: 2
