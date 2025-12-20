@@ -82,6 +82,22 @@ def _count_via_link_header(url: str, params: dict) -> int:
         return len(data) if isinstance(data, list) else 0
     return int(page_vals[0])
 
+def _get_main_language(owner: str, repo: str) -> Tuple[str, float, Dict[str, int]]:
+    url = f"{GITHUB_API}/repos/{owner}/{repo}/languages"
+    langs, _ = _get_json(url)
+
+    if not isinstance(langs, dict) or not langs:
+        return "", 0.0, {}
+
+    total = sum(int(v) for v in langs.values())
+    if total <= 0:
+        return "", 0.0, {k: int(v) for k, v in langs.items()}
+
+    main_lang, main_bytes = max(langs.items(), key=lambda kv: int(kv[1]))
+    pct = (int(main_bytes) / total) * 100.0
+    return str(main_lang), round(pct, 1), {k: int(v) for k, v in langs.items()}
+
+
 
 def _load_candidates(path: Path) -> List[Dict[str, Any]]:
     if not path.exists():
@@ -108,6 +124,8 @@ def build_entry(repo_full: str) -> Dict[str, Any]:
     repo_url = f"{GITHUB_API}/repos/{owner}/{repo}"
     repo_data, _ = _get_json(repo_url)
 
+    main_language, main_language_pct, languages_bytes = _get_main_language(owner, repo)
+
     html_url = repo_data.get("html_url") or f"https://github.com/{owner}/{repo}"
     created_at = repo_data.get("created_at", "")
 
@@ -132,6 +150,9 @@ def build_entry(repo_full: str) -> Dict[str, Any]:
         "stars_number": stars,
         "releases_number": releases_count,
         "contributors_number": contributors_count,
+        "main_language": main_language,
+        "main_language_percentage": main_language_pct,
+        "languages_bytes": languages_bytes,
         "notes": "",
     }
 
