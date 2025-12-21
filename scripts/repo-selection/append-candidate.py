@@ -16,6 +16,11 @@ load_dotenv()
 GITHUB_API = "https://api.github.com"
 CANDIDATES_PATH = Path("data/metadata/candidates.json")
 
+PROTECTED_FIELDS: Dict[str, Any] = {
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": "",
+}
 
 def _headers() -> Dict[str, str]:
     headers = {
@@ -153,7 +158,6 @@ def build_entry(repo_full: str) -> Dict[str, Any]:
         "main_language": main_language,
         "main_language_percentage": main_language_pct,
         "languages_bytes": languages_bytes,
-        "notes": "",
     }
 
 
@@ -162,11 +166,24 @@ def upsert_candidate(path: Path, entry: Dict[str, Any]) -> None:
 
     name = entry.get("name")
     idx = next((i for i, c in enumerate(candidates) if c.get("name") == name), None)
+
     if idx is None:
+        for field, default in PROTECTED_FIELDS.items():
+            entry.setdefault(field, default)
+
         candidates.append(entry)
         action = "Appended"
     else:
-        candidates[idx] = {**candidates[idx], **entry}
+        old = candidates[idx]
+        merged = {**old, **entry}
+
+        for field, default in PROTECTED_FIELDS.items():
+            if field in old:
+                merged[field] = old[field]
+            else:
+                merged[field] = default
+
+        candidates[idx] = merged
         action = "Updated"
 
     _save_candidates(path, candidates)

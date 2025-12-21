@@ -3,7 +3,7 @@
     "name": "pdm-project/pdm",
     "url": "https://github.com/pdm-project/pdm",
     "repo_creation_date": "2019-12-27T03:50:57Z",
-    "data_collection_timestamp": "2025-12-20T20:27:09Z",
+    "data_collection_timestamp": "2025-12-21T16:36:11Z",
     "commits_number": 3185,
     "stars_number": 8534,
     "releases_number": 238,
@@ -21,7 +21,7 @@
     "name": "pypa/pip-audit",
     "url": "https://github.com/pypa/pip-audit",
     "repo_creation_date": "2021-09-02T15:19:39Z",
-    "data_collection_timestamp": "2025-12-20T20:26:51Z",
+    "data_collection_timestamp": "2025-12-21T16:32:43Z",
     "commits_number": 790,
     "stars_number": 1156,
     "releases_number": 62,
@@ -116,5 +116,23 @@
     "languages_bytes": {
       "Python": 212750
     }
+  },
+  {
+    "name": "astral-sh/ruff-pre-commit",
+    "url": "https://github.com/astral-sh/ruff-pre-commit",
+    "repo_creation_date": "2022-09-20T02:52:35Z",
+    "data_collection_timestamp": "2025-12-21T16:41:58Z",
+    "commits_number": 543,
+    "stars_number": 1668,
+    "releases_number": 139,
+    "contributors_number": 25,
+    "main_language": "Python",
+    "main_language_percentage": 100.0,
+    "languages_bytes": {
+      "Python": 2690
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
   }
 ]
