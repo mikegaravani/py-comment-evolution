@@ -3,7 +3,7 @@
     "name": "pdm-project/pdm",
     "url": "https://github.com/pdm-project/pdm",
     "repo_creation_date": "2019-12-27T03:50:57Z",
-    "data_collection_timestamp": "2025-12-21T16:36:11Z",
+    "data_collection_timestamp": "2025-12-21T16:46:48Z",
     "commits_number": 3185,
     "stars_number": 8534,
     "releases_number": 238,
@@ -15,13 +15,15 @@
       "Python": 1277803,
       "Shell": 126739,
       "PowerShell": 32865
-    }
+    },
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
   },
   {
     "name": "pypa/pip-audit",
     "url": "https://github.com/pypa/pip-audit",
     "repo_creation_date": "2021-09-02T15:19:39Z",
-    "data_collection_timestamp": "2025-12-21T16:32:43Z",
+    "data_collection_timestamp": "2025-12-21T16:46:49Z",
     "commits_number": 790,
     "stars_number": 1156,
     "releases_number": 62,
@@ -32,14 +34,16 @@
     "languages_bytes": {
       "Python": 252390,
       "Makefile": 2141
-    }
+    },
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
   },
   {
     "name": "python-poetry/poetry-plugin-export",
     "url": "https://github.com/python-poetry/poetry-plugin-export",
     "repo_creation_date": "2021-05-21T15:29:52Z",
-    "data_collection_timestamp": "2025-12-20T20:26:38Z",
-    "commits_number": 218,
+    "data_collection_timestamp": "2025-12-21T16:46:51Z",
+    "commits_number": 220,
     "stars_number": 327,
     "releases_number": 23,
     "contributors_number": 34,
@@ -47,16 +51,18 @@
     "main_language": "Python",
     "main_language_percentage": 100.0,
     "languages_bytes": {
-      "Python": 154000
-    }
+      "Python": 153773
+    },
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
   },
   {
     "name": "pypa/hatch",
     "url": "https://github.com/pypa/hatch",
     "repo_creation_date": "2017-05-31T23:37:53Z",
-    "data_collection_timestamp": "2025-12-20T20:26:20Z",
+    "data_collection_timestamp": "2025-12-21T16:46:53Z",
     "commits_number": 1028,
-    "stars_number": 7037,
+    "stars_number": 7041,
     "releases_number": 140,
     "contributors_number": 89,
     "notes": "",
@@ -67,13 +73,15 @@
       "Starlark": 2304,
       "Shell": 644,
       "Dockerfile": 194
-    }
+    },
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
   },
   {
     "name": "pypa/build",
     "url": "https://github.com/pypa/build",
     "repo_creation_date": "2020-05-10T16:20:46Z",
-    "data_collection_timestamp": "2025-12-20T20:26:10Z",
+    "data_collection_timestamp": "2025-12-21T16:46:55Z",
     "commits_number": 917,
     "stars_number": 822,
     "releases_number": 9,
@@ -83,13 +91,15 @@
     "main_language_percentage": 100.0,
     "languages_bytes": {
       "Python": 135342
-    }
+    },
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
   },
   {
     "name": "tox-dev/pipdeptree",
     "url": "https://github.com/tox-dev/pipdeptree",
     "repo_creation_date": "2014-02-02T17:45:23Z",
-    "data_collection_timestamp": "2025-12-20T20:25:16Z",
+    "data_collection_timestamp": "2025-12-21T16:46:57Z",
     "commits_number": 582,
     "stars_number": 2965,
     "releases_number": 55,
@@ -99,13 +109,15 @@
     "main_language_percentage": 100.0,
     "languages_bytes": {
       "Python": 156836
-    }
+    },
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
   },
   {
     "name": "pypa/twine",
     "url": "https://github.com/pypa/twine",
     "repo_creation_date": "2013-08-13T15:39:39Z",
-    "data_collection_timestamp": "2025-12-20T20:24:25Z",
+    "data_collection_timestamp": "2025-12-21T16:46:59Z",
     "commits_number": 1355,
     "stars_number": 1744,
     "releases_number": 16,
@@ -115,13 +127,15 @@
     "main_language_percentage": 100.0,
     "languages_bytes": {
       "Python": 212750
-    }
+    },
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
   },
   {
     "name": "astral-sh/ruff-pre-commit",
     "url": "https://github.com/astral-sh/ruff-pre-commit",
     "repo_creation_date": "2022-09-20T02:52:35Z",
-    "data_collection_timestamp": "2025-12-21T16:41:58Z",
+    "data_collection_timestamp": "2025-12-21T16:47:01Z",
     "commits_number": 543,
     "stars_number": 1668,
     "releases_number": 139,
@@ -130,6 +144,409 @@
     "main_language_percentage": 100.0,
     "languages_bytes": {
       "Python": 2690
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "pycqa/bandit",
+    "url": "https://github.com/PyCQA/bandit",
+    "repo_creation_date": "2018-04-26T09:08:12Z",
+    "data_collection_timestamp": "2025-12-21T16:47:03Z",
+    "commits_number": 1485,
+    "stars_number": 7557,
+    "releases_number": 27,
+    "contributors_number": 193,
+    "main_language": "Python",
+    "main_language_percentage": 99.9,
+    "languages_bytes": {
+      "Python": 559595,
+      "Dockerfile": 329
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "PyCQA/prospector",
+    "url": "https://github.com/prospector-dev/prospector",
+    "repo_creation_date": "2013-08-05T07:26:30Z",
+    "data_collection_timestamp": "2025-12-21T16:47:05Z",
+    "commits_number": 1595,
+    "stars_number": 2053,
+    "releases_number": 72,
+    "contributors_number": 98,
+    "main_language": "Python",
+    "main_language_percentage": 100.0,
+    "languages_bytes": {
+      "Python": 253492,
+      "Perl": 20,
+      "Shell": 16
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "pre-commit/pre-commit",
+    "url": "https://github.com/pre-commit/pre-commit",
+    "repo_creation_date": "2014-03-13T00:39:38Z",
+    "data_collection_timestamp": "2025-12-21T16:47:08Z",
+    "commits_number": 2818,
+    "stars_number": 14733,
+    "releases_number": 116,
+    "contributors_number": 166,
+    "main_language": "Python",
+    "main_language_percentage": 97.4,
+    "languages_bytes": {
+      "Python": 591362,
+      "R": 12037,
+      "Shell": 3071,
+      "Dockerfile": 406,
+      "Lua": 212,
+      "Ruby": 195,
+      "Perl": 104,
+      "Go": 29,
+      "Rust": 13
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "PyCQA/isort",
+    "url": "https://github.com/PyCQA/isort",
+    "repo_creation_date": "2013-09-02T22:22:53Z",
+    "data_collection_timestamp": "2025-12-21T16:47:10Z",
+    "commits_number": 4448,
+    "stars_number": 6883,
+    "releases_number": 113,
+    "contributors_number": 325,
+    "main_language": "Python",
+    "main_language_percentage": 99.8,
+    "languages_bytes": {
+      "Python": 795796,
+      "Shell": 786,
+      "Dockerfile": 664,
+      "CSS": 158
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "copier-org/copier",
+    "url": "https://github.com/copier-org/copier",
+    "repo_creation_date": "2011-11-01T19:22:44Z",
+    "data_collection_timestamp": "2025-12-21T16:53:49Z",
+    "commits_number": 2017,
+    "stars_number": 3013,
+    "releases_number": 56,
+    "contributors_number": 114,
+    "main_language": "Python",
+    "main_language_percentage": 99.8,
+    "languages_bytes": {
+      "Python": 576588,
+      "Dockerfile": 526,
+      "Shell": 268,
+      "Jinja": 73
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "cookiecutter/cookiecutter",
+    "url": "https://github.com/cookiecutter/cookiecutter",
+    "repo_creation_date": "2013-07-14T18:31:22Z",
+    "data_collection_timestamp": "2025-12-21T16:53:51Z",
+    "commits_number": 3106,
+    "stars_number": 24457,
+    "releases_number": 29,
+    "contributors_number": 331,
+    "main_language": "Python",
+    "main_language_percentage": 98.5,
+    "languages_bytes": {
+      "Python": 318098,
+      "Makefile": 2539,
+      "Just": 1149,
+      "Jinja": 588,
+      "Shell": 353,
+      "Batchfile": 116
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "mkdocs/mkdocs",
+    "url": "https://github.com/mkdocs/mkdocs",
+    "repo_creation_date": "2014-01-11T21:05:21Z",
+    "data_collection_timestamp": "2025-12-21T16:53:53Z",
+    "commits_number": 2118,
+    "stars_number": 21471,
+    "releases_number": 15,
+    "contributors_number": 262,
+    "main_language": "Python",
+    "main_language_percentage": 81.0,
+    "languages_bytes": {
+      "Python": 707374,
+      "JavaScript": 116473,
+      "HTML": 36080,
+      "CSS": 13135
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "sphinx-doc/sphinx",
+    "url": "https://github.com/sphinx-doc/sphinx",
+    "repo_creation_date": "2015-01-02T10:53:28Z",
+    "data_collection_timestamp": "2025-12-21T16:53:55Z",
+    "commits_number": 22381,
+    "stars_number": 7576,
+    "releases_number": 77,
+    "contributors_number": 906,
+    "main_language": "Python",
+    "main_language_percentage": 72.7,
+    "languages_bytes": {
+      "Python": 4870172,
+      "JavaScript": 1273120,
+      "TeX": 351605,
+      "Jinja": 144272,
+      "HTML": 33574,
+      "Common Lisp": 13841,
+      "Makefile": 5367,
+      "CSS": 1288,
+      "BitBake": 1157,
+      "Cython": 245,
+      "C": 87,
+      "Assembly": 81,
+      "NASL": 77,
+      "Pascal": 45
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "pandas-dev/pandas",
+    "url": "https://github.com/pandas-dev/pandas",
+    "repo_creation_date": "2010-08-24T01:37:33Z",
+    "data_collection_timestamp": "2025-12-21T16:54:30Z",
+    "commits_number": 36882,
+    "stars_number": 47371,
+    "releases_number": 115,
+    "contributors_number": 4076,
+    "main_language": "Python",
+    "main_language_percentage": 91.1,
+    "languages_bytes": {
+      "Python": 21546784,
+      "Cython": 1406986,
+      "C": 355813,
+      "HTML": 285657,
+      "Shell": 18687,
+      "Meson": 12684,
+      "CSS": 9371,
+      "Smarty": 8852,
+      "XSLT": 1196
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "jina-ai/clip-as-service",
+    "url": "https://github.com/jina-ai/clip-as-service",
+    "repo_creation_date": "2018-11-12T10:48:50Z",
+    "data_collection_timestamp": "2025-12-21T16:54:33Z",
+    "commits_number": 1960,
+    "stars_number": 12795,
+    "releases_number": 70,
+    "contributors_number": 67,
+    "main_language": "Python",
+    "main_language_percentage": 94.3,
+    "languages_bytes": {
+      "Python": 207709,
+      "Shell": 6769,
+      "Dockerfile": 5895
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "Textualize/rich-cli",
+    "url": "https://github.com/Textualize/rich-cli",
+    "repo_creation_date": "2022-01-22T12:31:52Z",
+    "data_collection_timestamp": "2025-12-21T16:55:51Z",
+    "commits_number": 119,
+    "stars_number": 3523,
+    "releases_number": 4,
+    "contributors_number": 15,
+    "main_language": "Python",
+    "main_language_percentage": 91.4,
+    "languages_bytes": {
+      "Python": 34113,
+      "Jupyter Notebook": 3209
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "vrslev/ytr",
+    "url": "https://github.com/vrslev/ytr",
+    "repo_creation_date": "2022-05-01T17:21:53Z",
+    "data_collection_timestamp": "2025-12-21T16:55:53Z",
+    "commits_number": 14,
+    "stars_number": 3,
+    "releases_number": 1,
+    "contributors_number": 2,
+    "main_language": "Python",
+    "main_language_percentage": 100.0,
+    "languages_bytes": {
+      "Python": 7365
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "saadmk11/logbook-cli",
+    "url": "https://github.com/saadmk11/logbook-cli",
+    "repo_creation_date": "2021-05-14T06:08:42Z",
+    "data_collection_timestamp": "2025-12-21T16:55:54Z",
+    "commits_number": 12,
+    "stars_number": 7,
+    "releases_number": 1,
+    "contributors_number": 1,
+    "main_language": "Python",
+    "main_language_percentage": 100.0,
+    "languages_bytes": {
+      "Python": 9880
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "nvbn/thefuck",
+    "url": "https://github.com/nvbn/thefuck",
+    "repo_creation_date": "2015-04-08T15:08:04Z",
+    "data_collection_timestamp": "2025-12-21T16:55:56Z",
+    "commits_number": 1651,
+    "stars_number": 94967,
+    "releases_number": 17,
+    "contributors_number": 195,
+    "main_language": "Python",
+    "main_language_percentage": 99.7,
+    "languages_bytes": {
+      "Python": 543910,
+      "Dockerfile": 754,
+      "PowerShell": 622,
+      "Shell": 134,
+      "Batchfile": 130
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "ansible/ansible-lint",
+    "url": "https://github.com/ansible/ansible-lint",
+    "repo_creation_date": "2013-08-14T11:08:00Z",
+    "data_collection_timestamp": "2025-12-21T16:57:54Z",
+    "commits_number": 3126,
+    "stars_number": 3801,
+    "releases_number": 125,
+    "contributors_number": 356,
+    "main_language": "Python",
+    "main_language_percentage": 98.8,
+    "languages_bytes": {
+      "Python": 925145,
+      "TypeScript": 6992,
+      "Shell": 4243
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "psf/black",
+    "url": "https://github.com/psf/black",
+    "repo_creation_date": "2018-03-14T19:54:45Z",
+    "data_collection_timestamp": "2025-12-21T16:57:56Z",
+    "commits_number": 2105,
+    "stars_number": 41237,
+    "releases_number": 50,
+    "contributors_number": 493,
+    "main_language": "Python",
+    "main_language_percentage": 99.7,
+    "languages_bytes": {
+      "Python": 5291741,
+      "Vim Script": 10624,
+      "Jupyter Notebook": 2848,
+      "Dockerfile": 1148
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "openai/chatgpt-retrieval-plugin",
+    "url": "https://github.com/openai/chatgpt-retrieval-plugin",
+    "repo_creation_date": "2023-03-23T06:06:22Z",
+    "data_collection_timestamp": "2025-12-21T16:57:58Z",
+    "commits_number": 109,
+    "stars_number": 21233,
+    "releases_number": 0,
+    "contributors_number": 40,
+    "main_language": "Python",
+    "main_language_percentage": 99.7,
+    "languages_bytes": {
+      "Python": 331134,
+      "Dockerfile": 584,
+      "Makefile": 357
+    },
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": ""
+  },
+  {
+    "name": "significant-gravitas/Auto-GPT",
+    "url": "https://github.com/Significant-Gravitas/AutoGPT",
+    "repo_creation_date": "2023-03-16T09:21:07Z",
+    "data_collection_timestamp": "2025-12-21T16:58:00Z",
+    "commits_number": 7650,
+    "stars_number": 180417,
+    "releases_number": 84,
+    "contributors_number": 797,
+    "main_language": "Python",
+    "main_language_percentage": 62.0,
+    "languages_bytes": {
+      "Python": 5956206,
+      "TypeScript": 3129438,
+      "Dart": 203562,
+      "JavaScript": 115499,
+      "PLpgSQL": 68241,
+      "Jinja": 42254,
+      "C++": 23419,
+      "CMake": 18862,
+      "CSS": 11802,
+      "Shell": 10675,
+      "Dockerfile": 6941,
+      "HTML": 3023,
+      "Ruby": 2803,
+      "Batchfile": 2732,
+      "Swift": 2384,
+      "Makefile": 1797,
+      "C": 1425,
+      "Elixir": 1068,
+      "Kotlin": 140,
+      "Objective-C": 38
     },
     "notes": "",
     "repo_time_period": "2020s",

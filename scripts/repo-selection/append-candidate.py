@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import requests
 
 # Appends a candidate repository to data/metadata/candidates.json, with useful repo metadata.
-# USAGE: python scripts/repo-selection/append-candidate.py <owner/repo>
+# USAGE: python scripts/repo-selection/append-candidate.py <owner/repo> [eventually more <owner/repo> ...]
 
 load_dotenv()
 GITHUB_API = "https://api.github.com"
@@ -191,14 +191,23 @@ def upsert_candidate(path: Path, entry: Dict[str, Any]) -> None:
 
 
 def main(argv: List[str]) -> int:
-    if len(argv) != 2 or argv[1] in {"-h", "--help"}:
+    if len(argv) < 2 or argv[1] in {"-h", "--help"}:
         print(__doc__.strip())
         return 0
 
-    repo_full = argv[1]
-    entry = build_entry(repo_full)
-    upsert_candidate(CANDIDATES_PATH, entry)
-    return 0
+    repo_fulls = argv[1:]
+
+    any_failed = False
+    for repo_full in repo_fulls:
+        try:
+            entry = build_entry(repo_full)
+            upsert_candidate(CANDIDATES_PATH, entry)
+        except Exception as e:
+            any_failed = True
+            print(f"ERROR processing {repo_full!r}: {e}", file=sys.stderr)
+
+    return 1 if any_failed else 0
+
 
 
 if __name__ == "__main__":
