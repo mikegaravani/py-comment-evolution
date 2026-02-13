@@ -1,0 +1,52 @@
+version: 1
+
+dataset:
+  name: "Python Comment Evolution Dataset"
+  description: >
+    Repositories selected for a study of Python commenting practices
+    across two time periods.
+  theme: "cli-tools"
+  groups:
+    old_2000s:
+      label: "2000s"
+      start_year: 2000
+      end_year: 2009
+    new_2020s:
+      label: "2020s"
+      start_year: 2020
+      end_year: 2029
+
+# Default snapshot policy for the selected repos
+# Currently set to a fixed age of 2 years after the first commit
+default_snapshot:
+  policy: "fixed_age"
+  fixed_age_years: 2
+  inception_definition: "first_commit"
+  timezone: "UTC"
+  fallback:
+    # If the fixed age date is after the latest commit, fall back to latest commit
+    policy: "latest_commit"
+
+# Default include/exclude rules
+default_paths:
+  include_globs:
+    - "**/*.py"
+  exclude_globs:
+    # common virtualenv/build/cache
+    - "**/.venv/**"
+    - "**/venv/**"
+    - "**/__pycache__/**"
+    - "**/.tox/**"
+    - "**/build/**"
+    - "**/dist/**"
+    - "**/.eggs/**"
+    # common vendored/third party
+    - "**/vendor/**"
+    - "**/vendors/**"
+    - "**/third_party/**"
+    - "**/third-party/**"
+    - "**/extern/**"
+    - "**/external/**"
+    # docs output
+    - "**/_build/**"
+# Repos to be included
