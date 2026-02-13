@@ -7,6 +7,7 @@ import os
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+from urllib.parse import urlparse, parse_qs
 import requests
 
 # Appends a candidate repository to data/metadata/repo-selection/initial_candidates_2020s.json, with useful repo metadata.
@@ -14,7 +15,7 @@ import requests
 
 load_dotenv()
 GITHUB_API = "https://api.github.com"
-CANDIDATES_PATH = Path("data/metadata/candidates.json")
+CANDIDATES_PATH = Path("data/metadata/repo-selection/initial_candidates_2020s.json")
 
 PROTECTED_FIELDS: Dict[str, Any] = {
     "notes": "",
@@ -78,8 +79,6 @@ def _count_via_link_header(url: str, params: dict) -> int:
 
     if not last_url:
         return len(data) if isinstance(data, list) else 0
-
-    from urllib.parse import urlparse, parse_qs
 
     qs = parse_qs(urlparse(last_url).query)
     page_vals = qs.get("page", [])
@@ -146,19 +145,23 @@ def build_entry(repo_full: str) -> Dict[str, Any]:
     contributors_url = f"{GITHUB_API}/repos/{owner}/{repo}/contributors"
     contributors_count = _count_via_link_header(contributors_url, params={"anon": "true"})
 
-    return {
-        "name": repo_full,
-        "url": html_url,
-        "repo_creation_date": created_at,
-        "data_collection_timestamp": data_collection_timestamp,
-        "commits_number": commits_count,
-        "stars_number": stars,
-        "releases_number": releases_count,
-        "contributors_number": contributors_count,
-        "main_language": main_language,
-        "main_language_percentage": main_language_pct,
-        "languages_bytes": languages_bytes,
-    }
+    entry: Dict[str, Any] = {field: default for field, default in PROTECTED_FIELDS.items()}
+    entry.update(
+        {
+            "name": repo_full,
+            "url": html_url,
+            "repo_creation_date": created_at,
+            "data_collection_timestamp": data_collection_timestamp,
+            "commits_number": commits_count,
+            "stars_number": stars,
+            "releases_number": releases_count,
+            "contributors_number": contributors_count,
+            "main_language": main_language,
+            "main_language_percentage": main_language_pct,
+            "languages_bytes": languages_bytes,
+        }
+    )
+    return entry
 
 
 def upsert_candidate(path: Path, entry: Dict[str, Any]) -> None:
