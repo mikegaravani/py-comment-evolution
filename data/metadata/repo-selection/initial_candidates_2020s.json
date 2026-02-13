@@ -36,7 +36,8 @@
       "Makefile": 2141
     },
     "repo_time_period": "2020s",
-    "is_chosen_candidate": ""
+    "is_chosen_candidate": "true",
+    "reason": ""
   },
   {
     "name": "python-poetry/poetry-plugin-export",

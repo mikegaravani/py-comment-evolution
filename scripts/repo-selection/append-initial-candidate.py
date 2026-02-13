@@ -9,8 +9,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 import requests
 
-# Appends a candidate repository to data/metadata/candidates.json, with useful repo metadata.
-# USAGE: python scripts/repo-selection/append-candidate.py <owner/repo> [eventually more <owner/repo> ...]
+# Appends a candidate repository to data/metadata/repo-selection/initial_candidates_2020s.json, with useful repo metadata.
+# USAGE: python scripts/repo-selection/append-initial-candidate.py <owner/repo> [eventually more <owner/repo> ...]
 
 load_dotenv()
 GITHUB_API = "https://api.github.com"
