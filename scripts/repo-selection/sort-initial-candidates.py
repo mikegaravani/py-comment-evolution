@@ -16,9 +16,16 @@ def main():
 
     sorted_repos = sorted(repos, key=get_python_bytes)
 
+    reduced = [
+        {
+            "name": repo["name"],
+            "python_bytes": get_python_bytes(repo)
+        }
+        for repo in sorted_repos
+    ]
+
     with open(OUTPUT_FILE_PATH, "w", encoding="utf-8") as out:
-        for repo in sorted_repos:
-            out.write(f'{repo["name"]}: {get_python_bytes(repo)}\n')
+        json.dump(reduced, out, indent=2)
 
     print(f"Sorted repos saved to {OUTPUT_FILE_PATH}")
 
