@@ -19,7 +19,8 @@ def main():
     reduced = [
         {
             "name": repo["name"],
-            "python_bytes": get_python_bytes(repo)
+            "python_bytes": get_python_bytes(repo),
+            "repo_creation_date": repo.get("repo_creation_date", "")[:4],  # Just the year
         }
         for repo in sorted_repos
     ]
