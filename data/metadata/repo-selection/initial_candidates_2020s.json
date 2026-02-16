@@ -552,5 +552,132 @@
     "notes": "",
     "repo_time_period": "2020s",
     "is_chosen_candidate": ""
+  },
+  {
+    "notes": "Not mainly written in python!! It's a rust project",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": "",
+    "name": "astral-sh/uv",
+    "url": "https://github.com/astral-sh/uv",
+    "repo_creation_date": "2023-10-02T20:24:11Z",
+    "data_collection_timestamp": "2026-02-16T17:39:59Z",
+    "commits_number": 8449,
+    "stars_number": 79295,
+    "releases_number": 254,
+    "contributors_number": 510,
+    "main_language": "Rust",
+    "main_language_percentage": 98.1,
+    "languages_bytes": {
+      "Rust": 16883408,
+      "Python": 279006,
+      "Shell": 16836,
+      "Mustache": 7796,
+      "Batchfile": 5500,
+      "Nushell": 3795,
+      "PowerShell": 2883,
+      "Dockerfile": 2395,
+      "Jupyter Notebook": 2140,
+      "C": 320,
+      "RenderScript": 2
+    }
+  },
+  {
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": "",
+    "name": "PyCQA/bandit",
+    "url": "https://github.com/PyCQA/bandit",
+    "repo_creation_date": "2018-04-26T09:08:12Z",
+    "data_collection_timestamp": "2026-02-16T18:00:35Z",
+    "commits_number": 1490,
+    "stars_number": 7782,
+    "releases_number": 28,
+    "contributors_number": 195,
+    "main_language": "Python",
+    "main_language_percentage": 99.9,
+    "languages_bytes": {
+      "Python": 559620,
+      "Dockerfile": 329
+    }
+  },
+  {
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": "",
+    "name": "Textualize/textual",
+    "url": "https://github.com/Textualize/textual",
+    "repo_creation_date": "2021-04-08T15:24:47Z",
+    "data_collection_timestamp": "2026-02-16T18:16:23Z",
+    "commits_number": 12895,
+    "stars_number": 34312,
+    "releases_number": 210,
+    "contributors_number": 189,
+    "main_language": "Python",
+    "main_language_percentage": 98.8,
+    "languages_bytes": {
+      "Python": 4072442,
+      "Tree-sitter Query": 32213,
+      "Jinja": 11112,
+      "TypeScript": 4869,
+      "Makefile": 2353
+    }
+  },
+  {
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": "",
+    "name": "fastapi/typer",
+    "url": "https://github.com/fastapi/typer",
+    "repo_creation_date": "2019-12-24T12:24:11Z",
+    "data_collection_timestamp": "2026-02-16T18:18:00Z",
+    "commits_number": 1349,
+    "stars_number": 18842,
+    "releases_number": 67,
+    "contributors_number": 99,
+    "main_language": "Python",
+    "main_language_percentage": 99.7,
+    "languages_bytes": {
+      "Python": 683230,
+      "Shell": 1278,
+      "Dockerfile": 895
+    }
+  },
+  {
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": "",
+    "name": "samuelcolvin/watchfiles",
+    "url": "https://github.com/samuelcolvin/watchfiles",
+    "repo_creation_date": "2017-10-13T17:31:51Z",
+    "data_collection_timestamp": "2026-02-16T18:19:05Z",
+    "commits_number": 290,
+    "stars_number": 2417,
+    "releases_number": 42,
+    "contributors_number": 52,
+    "main_language": "Python",
+    "main_language_percentage": 86.1,
+    "languages_bytes": {
+      "Python": 104026,
+      "Rust": 15093,
+      "Makefile": 1655
+    }
+  },
+  {
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": "",
+    "name": "pytest-dev/pytest-xdist",
+    "url": "https://github.com/pytest-dev/pytest-xdist",
+    "repo_creation_date": "2015-09-01T18:51:45Z",
+    "data_collection_timestamp": "2026-02-16T18:22:42Z",
+    "commits_number": 1365,
+    "stars_number": 1796,
+    "releases_number": 5,
+    "contributors_number": 113,
+    "main_language": "Python",
+    "main_language_percentage": 100.0,
+    "languages_bytes": {
+      "Python": 280985
+    }
   }
 ]

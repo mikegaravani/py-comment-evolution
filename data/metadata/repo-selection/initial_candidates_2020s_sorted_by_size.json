@@ -20,6 +20,11 @@
     "repo_creation_date": "2022"
   },
   {
+    "name": "samuelcolvin/watchfiles",
+    "python_bytes": 104026,
+    "repo_creation_date": "2017"
+  },
+  {
     "name": "pypa/build",
     "python_bytes": 135342,
     "repo_creation_date": "2020"
@@ -55,6 +60,16 @@
     "repo_creation_date": "2013"
   },
   {
+    "name": "astral-sh/uv",
+    "python_bytes": 279006,
+    "repo_creation_date": "2023"
+  },
+  {
+    "name": "pytest-dev/pytest-xdist",
+    "python_bytes": 280985,
+    "repo_creation_date": "2015"
+  },
+  {
     "name": "cookiecutter/cookiecutter",
     "python_bytes": 318098,
     "repo_creation_date": "2013"
@@ -75,6 +90,11 @@
     "repo_creation_date": "2018"
   },
   {
+    "name": "PyCQA/bandit",
+    "python_bytes": 559620,
+    "repo_creation_date": "2018"
+  },
+  {
     "name": "copier-org/copier",
     "python_bytes": 576588,
     "repo_creation_date": "2011"
@@ -83,6 +103,11 @@
     "name": "pre-commit/pre-commit",
     "python_bytes": 591362,
     "repo_creation_date": "2014"
+  },
+  {
+    "name": "fastapi/typer",
+    "python_bytes": 683230,
+    "repo_creation_date": "2019"
   },
   {
     "name": "mkdocs/mkdocs",
@@ -108,6 +133,11 @@
     "name": "pypa/hatch",
     "python_bytes": 1951465,
     "repo_creation_date": "2017"
+  },
+  {
+    "name": "Textualize/textual",
+    "python_bytes": 4072442,
+    "repo_creation_date": "2021"
   },
   {
     "name": "sphinx-doc/sphinx",
