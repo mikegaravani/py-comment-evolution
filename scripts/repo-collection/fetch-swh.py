@@ -62,21 +62,25 @@ def utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-def http_get(url: str, params: Optional[dict] = None, retries: int = 6) -> requests.Response:
-    last_err = None
+def http_get(url: str, params: Optional[dict] = None, retries: int = 8) -> requests.Response:
+    last_err: Optional[Exception] = None
     for attempt in range(retries):
         try:
             r = SESSION.get(url, params=params, timeout=DEFAULT_TIMEOUT)
             if r.status_code == 429:
-                # rate limiting
                 time.sleep(1.5 * (attempt + 1))
+                continue
+            if 500 <= r.status_code < 600:
+                # transient server errors
+                time.sleep(1.0 * (attempt + 1))
                 continue
             r.raise_for_status()
             return r
         except Exception as e:
             last_err = e
             time.sleep(1.0 * (attempt + 1))
-    raise FetchError(f"GET failed after {retries} retries: {url} ({last_err})")
+    raise FetchError(f"GET failed after {retries} retries: {url} ({repr(last_err)})")
+
 
 
 def http_get_json(url: str, params: Optional[dict] = None) -> Any:
@@ -186,21 +190,28 @@ def materialize_tree(
     out_dir: Path,
     *,
     sleep_s: float = 0.0,
-) -> Tuple[int, int, List[str]]:
+) -> Tuple[int, int, List[str], List[dict]]:
     """
     Recursively materialize directory <dir_id> under out_dir.
 
-    Returns: (num_files_written, num_files_skipped, relative_paths_list)
+    Returns: (written, skipped, rel_paths, failures)
     """
     written = 0
     skipped = 0
     rel_paths: List[str] = []
+    failures: List[dict] = []
 
     stack: List[Tuple[str, Path]] = [(dir_id, out_dir)]
 
     while stack:
         current_dir_id, current_out = stack.pop()
-        entries = list_directory_entries(current_dir_id)
+        try:
+            entries = list_directory_entries(current_dir_id)
+        except Exception as e:
+            failures.append({"dir_id": current_dir_id, "error": str(e)})
+            print(f"  WARN: failed to list directory {current_dir_id}: {e}")
+            continue
+
 
         for e in entries:
             name = e.get("name")
@@ -238,10 +249,7 @@ def materialize_tree(
 
                 continue
 
-            # ignore: rev, rel, etc. (rare in directory entries)
-            # you can log these later if you want
-
-    return written, skipped, rel_paths
+    return written, skipped, rel_paths, failures
 
 
 def main() -> None:
@@ -264,11 +272,13 @@ def main() -> None:
         err_msg = None
 
         try:
-            written, skipped, rel_paths = materialize_tree(
+            written, skipped, rel_paths, failures = materialize_tree(
                 row.directory_id,
                 out_dir,
                 sleep_s=0.0,
             )
+
+            status = "success" if not failures else "partial_success"
 
             manifest = {
                 "repo": row.name,
@@ -283,13 +293,14 @@ def main() -> None:
                 "files_written": written,
                 "files_skipped": skipped,
                 "manifest_paths_sha256": compute_manifest_hash(rel_paths),
+                "directory_failures": failures,
             }
             manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
             prov = {
                 **manifest,
                 "duration_seconds": round(time.time() - start, 3),
-                "status": "success",
+                "status": status,
             }
             write_provenance(prov)
 
