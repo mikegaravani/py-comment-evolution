@@ -194,14 +194,10 @@ def tag_candidates(repo_name: str, release: str) -> List[str]:
     return out
 
 
-def resolve_tag_to_revision_and_directory(snapshot_id: str, tag_ref: str) -> Tuple[str, str, str]:
+def resolve_tag_to_revision_and_directory(snapshot_id: str, tag_ref: str) -> Tuple[str, str, str, str]:
     """
-    Returns (tag_ref, revision_id, directory_id)
-
-    Tag branch target can be:
-      - revision -> revision endpoint has 'directory'
-      - release  -> release endpoint has target + target_type, follow to revision/directory
-      - alias    -> follow alias then handle
+    Returns (tag_ref, revision_id, directory_id, release_date)
+    Release date can be "" ?
     """
     b = snapshot_fetch_branch(snapshot_id, tag_ref)
     if not b:
@@ -221,23 +217,31 @@ def resolve_tag_to_revision_and_directory(snapshot_id: str, tag_ref: str) -> Tup
         directory = rev.get("directory")
         if not isinstance(directory, str):
             raise ResolutionError(f"Revision missing directory: {target}")
-        return tag_ref, target, directory
+        release_date = rev.get("date") or ""
+        if not isinstance(release_date, str):
+            release_date = ""
+        return tag_ref, target, directory, release_date
 
     if target_type == "release":
         rel = http_get_json(f"{SWH_API}/release/{target}/")
+        release_date = rel.get("date") or ""
+        if not isinstance(release_date, str):
+            release_date = ""
+
         rel_target_type = rel.get("target_type")
         rel_target = rel.get("target")
         if not isinstance(rel_target, str) or not isinstance(rel_target_type, str):
             raise ResolutionError(f"Release missing target: {target}")
+
         if rel_target_type == "revision":
             rev = http_get_json(f"{SWH_API}/revision/{rel_target}/")
             directory = rev.get("directory")
             if not isinstance(directory, str):
                 raise ResolutionError(f"Revision missing directory: {rel_target}")
-            return tag_ref, rel_target, directory
+            return tag_ref, rel_target, directory, release_date
+
         if rel_target_type == "directory":
-            # Rare, but possible: a release can point directly to a directory
-            return tag_ref, "", rel_target
+            return tag_ref, "", rel_target, release_date
 
         raise ResolutionError(
             f"Release {target} points to unsupported target_type: {rel_target_type}"
@@ -260,12 +264,13 @@ def resolve_one(repo: RepoConfig) -> Dict[str, str]:
     last_err = None
     for ref in tag_candidates(repo.name, repo.release):
         try:
-            tag_ref, revision_id, directory_id = resolve_tag_to_revision_and_directory(snapshot_id, ref)
+            tag_ref, revision_id, directory_id, release_date = resolve_tag_to_revision_and_directory(snapshot_id, ref)
             return {
                 "name": repo.name,
                 "group": repo.group,
                 "origin_url": repo.url,
                 "release": repo.release,
+                "release_date": release_date,
                 "tag_ref": tag_ref,
                 "snapshot_id": snapshot_id,
                 "revision_id": revision_id,
@@ -298,6 +303,7 @@ def resolve_repos_to_csv(repos: List[RepoConfig], out_csv: Path) -> int:
         "group",
         "origin_url",
         "release",
+        "release_date",
         "tag_ref",
         "snapshot_id",
         "revision_id",
