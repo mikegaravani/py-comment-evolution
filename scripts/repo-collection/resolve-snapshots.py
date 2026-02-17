@@ -1,16 +1,21 @@
 """
-Takes the origin URL and release tage from config/repos.yaml, and
+Default job:
+Takes the origin URL and release tags from config/repos.yaml, and
 produces the Software Heritage snapshot, revision, and directory IDs in data/metadata/snapshots.csv.
+  - Inputs:  config/repos.yaml
+  - Outputs: data/metadata/snapshots.csv
+USAGE: python scripts/repo-collection/resolve-snapshots.py
 
-Inputs:
-  - config/repos.yaml
-
-Outputs:
-  - data/metadata/snapshots.csv
+Alternate job:
+Takes the candidates for the 2000s repos and produces the Software Heritage snapshot, revision, and directory IDs.
+  - Inputs:  data/metadata/repo-selection/initial_candidates_2000s.yaml
+  - Outputs: data/metadata/repo-selection/initial_candidates_2000s_snapshots.csv
+USAGE: python scripts/repo-collection/resolve-snapshots.py --job candidates_2000s
 """
 
 from __future__ import annotations
 
+import argparse
 import csv
 import time
 from dataclasses import dataclass
@@ -21,8 +26,14 @@ import requests
 import yaml
 
 SWH_API = "https://archive.softwareheritage.org/api/1"
-CONFIG_PATH = Path("config/repos.yaml")
-OUT_CSV = Path("data/metadata/snapshots.csv")
+
+DEFAULT_CONFIG_PATH = Path("config/repos.yaml")
+DEFAULT_OUT_CSV = Path("data/metadata/snapshots.csv")
+
+CANDIDATES_2000S_PATH = Path("data/metadata/repo-selection/initial_candidates_2000s.yaml")
+CANDIDATES_2000S_OUT_CSV = Path(
+    "data/metadata/repo-selection/initial_candidates_2000s_snapshots.csv"
+)
 
 SESSION = requests.Session()
 SESSION.headers.update(
@@ -42,6 +53,10 @@ class RepoConfig:
     group: str
     release: str
 
+@dataclass
+class JobSpec:
+    input_yaml: Path
+    output_csv: Path
 
 class ResolutionError(RuntimeError):
     pass
@@ -65,14 +80,14 @@ def http_get_json(url: str, params: Optional[dict] = None, retries: int = 5) -> 
     raise ResolutionError(f"GET failed after {retries} retries: {url} ({last_err})")
 
 
-def load_config(path: Path) -> List[RepoConfig]:
+def load_repos_from_yaml(path: Path) -> List[RepoConfig]:
     if not path.exists():
         raise ResolutionError(f"Missing config file: {path}")
     cfg = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(cfg, dict) or "repos" not in cfg:
         raise ResolutionError("Config must be a dict with top-level key: repos")
 
-    repos = []
+    repos: List[RepoConfig] = []
     for item in cfg["repos"]:
         repos.append(
             RepoConfig(
@@ -110,7 +125,7 @@ def latest_visit_with_snapshot(origin_url: str) -> dict:
 
 def snapshot_fetch_branch(snapshot_id: str, branch_name: str) -> Optional[dict]:
     """
-    Efficiently try to retrieve a specific branch from the snapshot, without loading all branches.
+    Try to retrieve a specific branch from the snapshot, without loading all branches.
     Uses snapshot query parameters:
       - branches_from
       - branches_count
@@ -122,7 +137,6 @@ def snapshot_fetch_branch(snapshot_id: str, branch_name: str) -> Optional[dict]:
         params={
             "branches_from": branch_name,
             "branches_count": 50,
-            # Keep all target types; tags might be 'release' or 'revision'
         },
     )
     branches = data.get("branches") or {}
@@ -266,10 +280,8 @@ def resolve_one(repo: RepoConfig) -> Dict[str, str]:
         f"Tried candidates: {tag_candidates(repo.name, repo.release)}. Last error: {last_err}"
     )
 
-
-def main() -> None:
-    repos = load_config(CONFIG_PATH)
-    OUT_CSV.parent.mkdir(parents=True, exist_ok=True)
+def resolve_repos_to_csv(repos: List[RepoConfig], out_csv: Path) -> int:
+    out_csv.parent.mkdir(parents=True, exist_ok=True)
 
     rows: List[Dict[str, str]] = []
     for repo in repos:
@@ -291,14 +303,50 @@ def main() -> None:
         "revision_id",
         "directory_id",
     ]
-    with OUT_CSV.open("w", encoding="utf-8", newline="") as f:
+    with out_csv.open("w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fieldnames)
         w.writeheader()
         for r in rows:
             w.writerow(r)
 
-    print(f"\nWrote: {OUT_CSV} ({len(rows)} rows)")
+    print(f"\nWrote: {out_csv} ({len(rows)} rows)")
+    return len(rows)
 
+
+def get_job_spec(job: str) -> JobSpec:
+    """
+    Job presets. Default is what should be used to produce the snapshots.
+    """
+    if job == "default":
+        return JobSpec(input_yaml=DEFAULT_CONFIG_PATH, output_csv=DEFAULT_OUT_CSV)
+    if job == "candidates_2000s":
+        return JobSpec(input_yaml=CANDIDATES_2000S_PATH, output_csv=CANDIDATES_2000S_OUT_CSV)
+    raise ResolutionError(f"Unknown job '{job}'. Use 'default' or 'candidates_2000s'.")
+
+
+def parse_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser(description="Resolve SWH snapshot/revision/directory IDs for repos.")
+    p.add_argument(
+        "--job",
+        default="default",
+        choices=["default", "candidates_2000s"],
+        help="Which input/output preset to run (default: default).",
+    )
+    # EXTRA OVERRIDES (generally NOT needed)
+    p.add_argument("--input", type=Path, default=None, help="Override input YAML path.")
+    p.add_argument("--output", type=Path, default=None, help="Override output CSV path.")
+    return p.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    spec = get_job_spec(args.job)
+
+    input_yaml = args.input if args.input is not None else spec.input_yaml
+    output_csv = args.output if args.output is not None else spec.output_csv
+
+    repos = load_repos_from_yaml(input_yaml)
+    resolve_repos_to_csv(repos, output_csv)
 
 if __name__ == "__main__":
     main()
