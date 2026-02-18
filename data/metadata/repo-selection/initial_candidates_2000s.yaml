@@ -1,0 +1,5 @@
+repos:
+  - name: "pip"
+    url: "https://github.com/pypa/pip"
+    group: "old_2000s"
+    release: "1.0.1"

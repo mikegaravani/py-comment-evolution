@@ -1,0 +1,2 @@
+name,group,origin_url,release,release_date,tag_ref,snapshot_id,revision_id,directory_id
+pip,old_2000s,https://github.com/pypa/pip,1.0.1,2011-04-30T23:20:34+02:00,refs/tags/1.0.1,a0631faadd6a4ccc11ae89da85325e99f44819d7,b1f2a9fddaa407cfbee6f249a52129e370800bd1,f41c2246cb66fe1aac134195fe788bd72baf2853

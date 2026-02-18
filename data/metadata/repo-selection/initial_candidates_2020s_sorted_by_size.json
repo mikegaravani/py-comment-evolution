@@ -1,0 +1,157 @@
+[
+  {
+    "name": "astral-sh/ruff-pre-commit",
+    "python_bytes": 2690,
+    "repo_creation_date": "2022"
+  },
+  {
+    "name": "vrslev/ytr",
+    "python_bytes": 7365,
+    "repo_creation_date": "2022"
+  },
+  {
+    "name": "saadmk11/logbook-cli",
+    "python_bytes": 9880,
+    "repo_creation_date": "2021"
+  },
+  {
+    "name": "Textualize/rich-cli",
+    "python_bytes": 34113,
+    "repo_creation_date": "2022"
+  },
+  {
+    "name": "samuelcolvin/watchfiles",
+    "python_bytes": 104026,
+    "repo_creation_date": "2017"
+  },
+  {
+    "name": "pypa/build",
+    "python_bytes": 135342,
+    "repo_creation_date": "2020"
+  },
+  {
+    "name": "python-poetry/poetry-plugin-export",
+    "python_bytes": 153773,
+    "repo_creation_date": "2021"
+  },
+  {
+    "name": "tox-dev/pipdeptree",
+    "python_bytes": 156836,
+    "repo_creation_date": "2014"
+  },
+  {
+    "name": "jina-ai/clip-as-service",
+    "python_bytes": 207709,
+    "repo_creation_date": "2018"
+  },
+  {
+    "name": "pypa/twine",
+    "python_bytes": 212750,
+    "repo_creation_date": "2013"
+  },
+  {
+    "name": "pypa/pip-audit",
+    "python_bytes": 252390,
+    "repo_creation_date": "2021"
+  },
+  {
+    "name": "PyCQA/prospector",
+    "python_bytes": 253492,
+    "repo_creation_date": "2013"
+  },
+  {
+    "name": "astral-sh/uv",
+    "python_bytes": 279006,
+    "repo_creation_date": "2023"
+  },
+  {
+    "name": "pytest-dev/pytest-xdist",
+    "python_bytes": 280985,
+    "repo_creation_date": "2015"
+  },
+  {
+    "name": "cookiecutter/cookiecutter",
+    "python_bytes": 318098,
+    "repo_creation_date": "2013"
+  },
+  {
+    "name": "openai/chatgpt-retrieval-plugin",
+    "python_bytes": 331134,
+    "repo_creation_date": "2023"
+  },
+  {
+    "name": "nvbn/thefuck",
+    "python_bytes": 543910,
+    "repo_creation_date": "2015"
+  },
+  {
+    "name": "PyCQA/bandit",
+    "python_bytes": 559620,
+    "repo_creation_date": "2018"
+  },
+  {
+    "name": "copier-org/copier",
+    "python_bytes": 576588,
+    "repo_creation_date": "2011"
+  },
+  {
+    "name": "pre-commit/pre-commit",
+    "python_bytes": 591362,
+    "repo_creation_date": "2014"
+  },
+  {
+    "name": "fastapi/typer",
+    "python_bytes": 683230,
+    "repo_creation_date": "2019"
+  },
+  {
+    "name": "mkdocs/mkdocs",
+    "python_bytes": 707374,
+    "repo_creation_date": "2014"
+  },
+  {
+    "name": "PyCQA/isort",
+    "python_bytes": 795796,
+    "repo_creation_date": "2013"
+  },
+  {
+    "name": "ansible/ansible-lint",
+    "python_bytes": 925145,
+    "repo_creation_date": "2013"
+  },
+  {
+    "name": "pdm-project/pdm",
+    "python_bytes": 1277803,
+    "repo_creation_date": "2019"
+  },
+  {
+    "name": "pypa/hatch",
+    "python_bytes": 1951465,
+    "repo_creation_date": "2017"
+  },
+  {
+    "name": "Textualize/textual",
+    "python_bytes": 4072442,
+    "repo_creation_date": "2021"
+  },
+  {
+    "name": "sphinx-doc/sphinx",
+    "python_bytes": 4870172,
+    "repo_creation_date": "2015"
+  },
+  {
+    "name": "psf/black",
+    "python_bytes": 5291741,
+    "repo_creation_date": "2018"
+  },
+  {
+    "name": "significant-gravitas/Auto-GPT",
+    "python_bytes": 5956206,
+    "repo_creation_date": "2023"
+  },
+  {
+    "name": "pandas-dev/pandas",
+    "python_bytes": 21546784,
+    "repo_creation_date": "2010"
+  }
+]
