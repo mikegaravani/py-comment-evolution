@@ -151,25 +151,6 @@
     "is_chosen_candidate": ""
   },
   {
-    "name": "pycqa/bandit",
-    "url": "https://github.com/PyCQA/bandit",
-    "repo_creation_date": "2018-04-26T09:08:12Z",
-    "data_collection_timestamp": "2025-12-21T16:47:03Z",
-    "commits_number": 1485,
-    "stars_number": 7557,
-    "releases_number": 27,
-    "contributors_number": 193,
-    "main_language": "Python",
-    "main_language_percentage": 99.9,
-    "languages_bytes": {
-      "Python": 559595,
-      "Dockerfile": 329
-    },
-    "notes": "",
-    "repo_time_period": "2020s",
-    "is_chosen_candidate": ""
-  },
-  {
     "name": "PyCQA/prospector",
     "url": "https://github.com/prospector-dev/prospector",
     "repo_creation_date": "2013-08-05T07:26:30Z",

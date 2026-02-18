@@ -85,11 +85,6 @@
     "repo_creation_date": "2015"
   },
   {
-    "name": "pycqa/bandit",
-    "python_bytes": 559595,
-    "repo_creation_date": "2018"
-  },
-  {
     "name": "PyCQA/bandit",
     "python_bytes": 559620,
     "repo_creation_date": "2018"

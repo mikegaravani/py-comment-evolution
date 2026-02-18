@@ -197,7 +197,7 @@ def tag_candidates(repo_name: str, release: str) -> List[str]:
 def resolve_tag_to_revision_and_directory(snapshot_id: str, tag_ref: str) -> Tuple[str, str, str, str]:
     """
     Returns (tag_ref, revision_id, directory_id, release_date)
-    Release date can be "" ?
+    Release date can be "".
     """
     b = snapshot_fetch_branch(snapshot_id, tag_ref)
     if not b:

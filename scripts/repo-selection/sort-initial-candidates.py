@@ -7,7 +7,7 @@ from pathlib import Path
 FILE_PATH = Path("data/metadata/repo-selection/initial_candidates_2020s.json")
 OUTPUT_FILE_PATH = Path("data/metadata/repo-selection/initial_candidates_2020s_sorted_by_size.json")
 
-def get_python_bytes(repo):
+def get_python_bytes(repo: dict) -> int:
     return repo.get("languages_bytes", {}).get("Python", 0)
 
 def main():
