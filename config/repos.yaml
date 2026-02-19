@@ -21,6 +21,11 @@ repos:
     url: "https://github.com/pypa/pip"
     group: "old_2000s"
     release: "1.0.1"
+  - name: "virtualenv"
+    url: "https://pypi.org/project/virtualenv/"
+    group: "old_2000s"
+    release: "1.4"
+    notes: "There is no known version control that goes back to 1.4, only the release on PyPI. Some source files in the release are compressed, so we will have to uncompress them"
 
 # # Default include/exclude rules
 # default_paths:

@@ -166,12 +166,7 @@ def snapshot_get_alias_target(snapshot_id: str, alias_branch: str, max_hops: int
 
 def tag_candidates(repo_name: str, release: str) -> List[str]:
     """
-    Try to find the correct tag name for the release.
-      - 1.0.1
-      - v1.0.1
-      - pip-1.0.1
-      - pip_1.0.1
-      - pip1.0.1
+    Try to find the correct tag name and prefix for the release.
     """
     r = release.strip()
     n = repo_name.strip()
@@ -185,12 +180,21 @@ def tag_candidates(repo_name: str, release: str) -> List[str]:
         f"{n}v{r}",
         f"{n}_v{r}",
     ]
+
+    prefixes = [
+        "refs/tags/",
+        "releases/",
+        "release/",
+    ]
+
     seen = set()
-    out = []
-    for b in bases:
-        if b not in seen:
-            seen.add(b)
-            out.append(f"refs/tags/{b}")
+    out: List[str] = []
+    for base in bases:
+        for pref in prefixes:
+            ref = f"{pref}{base}"
+            if ref not in seen:
+                seen.add(ref)
+                out.append(ref)
     return out
 
 
