@@ -8,3 +8,7 @@ repos:
     group: "old_2000s"
     release: "1.4"
     notes: "There is no known version control that goes back to 1.4, only the release on PyPI. Some source files in the release are compressed, so we will have to uncompress them"
+  - name: "setuptools"
+    url: "https://pypi.org/project/setuptools/"
+    group: "old_2000s"
+    release: "0.6c11"

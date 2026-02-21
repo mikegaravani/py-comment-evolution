@@ -10,7 +10,12 @@ Outputs:
   - data/raw/software_heritage/<repo>/<release>/_MANIFEST.json
 
 USAGE:
-  python scripts/repo-collection/fetch-swh.py
+ -> python scripts/repo-collection/fetch-swh.py
+
+
+EXTRA:
+Useful command to check rate limiting details (eats 1 call if available):
+ -> curl -i https://archive.softwareheritage.org/api/1/directory/f41c2246cb66fe1aac134195fe788bd72baf2853/ | head -n 20
 """
 
 from __future__ import annotations
@@ -24,6 +29,8 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+import random
+import sys
 
 import requests
 
@@ -62,24 +69,80 @@ def utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-def http_get(url: str, params: Optional[dict] = None, retries: int = 8) -> requests.Response:
+def sleep_with_countdown(seconds: float, prefix: str = "Sleeping") -> None:
+    remaining = int(seconds)
+    while remaining > 0:
+        mins, secs = divmod(remaining, 60)
+        sys.stdout.write(f"\r{prefix}: {mins:02d}:{secs:02d} ")
+        sys.stdout.flush()
+        time.sleep(1)
+        remaining -= 1
+    sys.stdout.write("\r" + " " * 40 + "\r")  # clear line
+    sys.stdout.flush()
+
+
+def http_get(url: str, params: Optional[dict] = None, retries: int = 10) -> requests.Response:
     last_err: Optional[Exception] = None
+    last_status: Optional[int] = None
+    last_text: Optional[str] = None
+
     for attempt in range(retries):
         try:
             r = SESSION.get(url, params=params, timeout=DEFAULT_TIMEOUT)
+            last_status = r.status_code
+
             if r.status_code == 429:
-                time.sleep(1.5 * (attempt + 1))
+                # Rate limiting headers
+                reset = r.headers.get("X-Ratelimit-Reset")
+                remaining = r.headers.get("X-Ratelimit-Remaining")
+                limit = r.headers.get("X-Ratelimit-Limit")
+
+                sleep_s: float
+
+                if reset:
+                    try:
+                        reset_ts = int(reset)
+                        now_ts = int(time.time())
+                        sleep_s = max(1.0, (reset_ts - now_ts) + 2.0)
+                    except ValueError:
+                        sleep_s = min(300.0, 2.0 ** attempt)
+                else:
+                    sleep_s = min(300.0, 2.0 ** attempt)
+
+                sleep_s += random.random() * 1.0
+
+                print(
+                    f"  RETRY {attempt+1}/{retries} 429 for {url} "
+                    f"(limit={limit}, remaining={remaining}, reset={reset}) -> sleeping {sleep_s:.1f}s"
+                )
+                sleep_with_countdown(sleep_s, prefix="  Rate limited, waiting")
                 continue
+
             if 500 <= r.status_code < 600:
-                # transient server errors
-                time.sleep(1.0 * (attempt + 1))
+                last_text = (r.text or "")[:500]
+                backoff = min(60.0, 1.5 ** attempt)
+                time.sleep(backoff + random.random() * 0.25)
                 continue
+
             r.raise_for_status()
             return r
+
         except Exception as e:
             last_err = e
-            time.sleep(1.0 * (attempt + 1))
-    raise FetchError(f"GET failed after {retries} retries: {url} ({repr(last_err)})")
+            sleep_s = min(15.0, 1.25 ** attempt) + random.random() * 0.25
+            print(f"  RETRY {attempt+1}/{retries} EXC {type(e).__name__} for {url} -> sleeping {sleep_s:.2f}s")
+            time.sleep(sleep_s)
+
+    detail = []
+    if last_status is not None:
+        detail.append(f"last_status={last_status}")
+    if last_text:
+        detail.append(f"last_body={last_text!r}")
+    if last_err is not None:
+        detail.append(f"last_err={last_err!r}")
+
+    suffix = ("; " + ", ".join(detail)) if detail else ""
+    raise FetchError(f"GET failed after {retries} retries: {url}{suffix}")
 
 
 
@@ -240,9 +303,23 @@ def materialize_tree(
                     continue
 
                 ensure_parent(out_path)
-                data = content_raw_bytes(target)
-                out_path.write_bytes(data)
-                written += 1
+
+                try:
+                    data = content_raw_bytes(target)
+                    out_path.write_bytes(data)
+                    written += 1
+                except Exception as ex:
+                    failures.append(
+                        {
+                            "type": "file",
+                            "path": rel,
+                            "content_id": target,
+                            "error": str(ex),
+                        }
+                    )
+                    print(f"  WARN: failed to fetch file {rel} content={target}: {ex}")
+                    # keep going
+                    continue
 
                 if sleep_s:
                     time.sleep(sleep_s)
@@ -250,6 +327,28 @@ def materialize_tree(
                 continue
 
     return written, skipped, rel_paths, failures
+
+def load_manifest(path: Path) -> Optional[dict]:
+    if not path.exists():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
+def is_complete(out_dir: Path, manifest: Optional[dict]) -> bool:
+    """
+    Decide if <out_dir> is already fully materialized.
+    Conservative: only skip if manifest exists and status == 'success'.
+    Optional: verify all listed paths exist and are non-empty.
+    """
+    if not manifest:
+        return False
+    if manifest.get("status") != "success":
+        return False
+
+    return True
 
 
 def main() -> None:
@@ -262,6 +361,11 @@ def main() -> None:
         out_dir.mkdir(parents=True, exist_ok=True)
 
         manifest_path = out_dir / "_MANIFEST.json"
+
+        existing = load_manifest(manifest_path)
+        if is_complete(out_dir, existing):
+            print(f"\nSkipping {row.name} release={row.release} (already FULLY materialized)")
+            continue
 
         print(f"\nFetching {row.name} release={row.release}")
         print(f"  directory_id={row.directory_id}")
@@ -295,6 +399,7 @@ def main() -> None:
                 "manifest_paths_sha256": compute_manifest_hash(rel_paths),
                 "directory_failures": failures,
             }
+            manifest["status"] = "success" if not failures else "partial_success"
             manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
             prov = {

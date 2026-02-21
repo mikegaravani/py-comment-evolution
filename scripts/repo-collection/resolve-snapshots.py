@@ -187,14 +187,20 @@ def tag_candidates(repo_name: str, release: str) -> List[str]:
         "release/",
     ]
 
+    suffixes = [
+        f"/{n}-{r}.tar.gz",
+        "",
+    ]
+
     seen = set()
     out: List[str] = []
     for base in bases:
         for pref in prefixes:
-            ref = f"{pref}{base}"
-            if ref not in seen:
-                seen.add(ref)
-                out.append(ref)
+            for suff in suffixes:
+                ref = f"{pref}{base}{suff}"
+                if ref not in seen:
+                    seen.add(ref)
+                    out.append(ref)
     return out
 
 
