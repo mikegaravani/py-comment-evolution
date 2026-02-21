@@ -172,7 +172,7 @@ def read_snapshots_csv(path: Path) -> List[SnapshotRow]:
     with path.open("r", encoding="utf-8", newline="") as f:
         r = csv.DictReader(f)
         for row in r:
-            # skip incomplete rows (e.g., resolution failures)
+            # skip incomplete rows (for resolution failures)
             if not row.get("directory_id"):
                 continue
             rows.append(
@@ -340,8 +340,6 @@ def load_manifest(path: Path) -> Optional[dict]:
 def is_complete(out_dir: Path, manifest: Optional[dict]) -> bool:
     """
     Decide if <out_dir> is already fully materialized.
-    Conservative: only skip if manifest exists and status == 'success'.
-    Optional: verify all listed paths exist and are non-empty.
     """
     if not manifest:
         return False

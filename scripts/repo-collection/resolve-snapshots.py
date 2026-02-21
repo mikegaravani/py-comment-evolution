@@ -295,11 +295,38 @@ def resolve_one(repo: RepoConfig) -> Dict[str, str]:
         f"Tried candidates: {tag_candidates(repo.name, repo.release)}. Last error: {last_err}"
     )
 
+def load_existing_resolutions(csv_path: Path) -> set[tuple[str, str]]:
+    """
+    Returns a set of (origin_url, release) already present in CSV.
+    """
+    if not csv_path.exists():
+        return set()
+
+    resolved = set()
+    with csv_path.open("r", encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            origin = row.get("origin_url")
+            release = row.get("release")
+            if origin and release:
+                resolved.add((origin.strip(), release.strip()))
+    return resolved
+
+
 def resolve_repos_to_csv(repos: List[RepoConfig], out_csv: Path) -> int:
     out_csv.parent.mkdir(parents=True, exist_ok=True)
 
+    existing = load_existing_resolutions(out_csv)
+    print(f"Found {len(existing)} existing resolutions")
+
     rows: List[Dict[str, str]] = []
+    
     for repo in repos:
+        key = (repo.url, repo.release)
+        if key in existing:
+            print(f"Skipping (already resolved): {repo.name} release={repo.release}")
+            continue
+            
         print(f"Resolving: {repo.name} ({repo.url}) release={repo.release}")
         try:
             row = resolve_one(repo)
@@ -319,13 +346,21 @@ def resolve_repos_to_csv(repos: List[RepoConfig], out_csv: Path) -> int:
         "revision_id",
         "directory_id",
     ]
-    with out_csv.open("w", encoding="utf-8", newline="") as f:
+
+    write_header = (not out_csv.exists()) or (out_csv.stat().st_size == 0)
+
+    with out_csv.open("a", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fieldnames)
-        w.writeheader()
+        if write_header:
+            w.writeheader()
         for r in rows:
             w.writerow(r)
 
-    print(f"\nWrote: {out_csv} ({len(rows)} rows)")
+    if not rows:
+        print("No new repos to resolve; nothing to write.")
+        return 0
+
+    print(f"\nUpdated: {out_csv} (+{len(rows)} rows)")
     return len(rows)
 
 
