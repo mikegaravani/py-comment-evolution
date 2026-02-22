@@ -46,6 +46,10 @@ repos:
     url: "https://pypi.org/project/Pygments/"
     group: old_2000s
     release: "1.0"
+  - name: "ipython"
+    url: "https://pypi.org/project/ipython/"
+    group: "old_2000s"
+    release: "0.10.1"
 
 # # Default include/exclude rules
 # default_paths:

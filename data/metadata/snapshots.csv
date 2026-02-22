@@ -6,3 +6,4 @@ scons,old_2000s,https://github.com/SCons/scons,1.0.0,2008-08-12T21:58:53+00:00,r
 coverage,old_2000s,https://pypi.org/project/coverage/,3.0,2009-06-14T03:36:26+00:00,releases/3.0,c47624ddc14ee26c4e175f542be037266bd85df7,,4e6a8ee64b61f84b596b5b0c9531e8e83bd1e064
 nose,old_2000s,https://github.com/nose-devs/nose,0.11.1,2009-05-13T20:00:52-04:00,refs/tags/release_0.11.1,ad1333756f3208d0a5406a075efe60b4786d751f,c0e29e35b3e698f4ac099a76c6e187b9f04cdf99,7f6051bfe88ae470efb6abda2994e30c84694843
 pygments,old_2000s,https://pypi.org/project/Pygments/,1.0,2008-11-23T18:07:41+00:00,releases/1.0,350ac8a5d0284be34165d1664850808ba65a235d,,a82251310eff87d529dbe2502e07bdfd07c9a48b
+ipython,old_2000s,https://pypi.org/project/ipython/,0.10.1,2010-10-12T08:40:01+00:00,releases/0.10.1/ipython-0.10.1.tar.gz,ef7ff594cc00cd82b5da62e4422c0777ceebcdc1,,90353396ee140362f37d8e7bee19b693ea16438a
