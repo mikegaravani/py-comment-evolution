@@ -60,6 +60,9 @@ DEFAULT_TIMEOUT = 60
 class FetchError(RuntimeError):
     pass
 
+class SkipRepo(RuntimeError):
+    pass
+
 @dataclass
 class SnapshotRow:
     name: str
@@ -259,6 +262,7 @@ def vault_flat_cook_and_download(
     *,
     poll_interval_s: float = 3.0,
     max_poll_s: float = 60 * 60,
+    skip_if_new_for_s: float = 10,
 ) -> Tuple[Path, Dict[str, Any]]:
     """
     Cook + download + extract a flat tarball for directory_id into out_dir.
@@ -274,11 +278,21 @@ def vault_flat_cook_and_download(
     last = cook_payload
     i = 0
     last_msg = None
+    new_since: Optional[float] = None
 
     log(f"vault: polling {swhid}")
     while True:
         status = last.get("status")
         msg = last.get("progress_message") or last.get("message") or ""
+
+        # If the tarball is not cooked yet, SWH stops at new. skip the repo
+        if status == "new":
+            if new_since is None:
+                new_since = time.time()
+            elif (time.time() - new_since) >= skip_if_new_for_s:
+                raise SkipRepo(f"Vault status stayed 'new' for {skip_if_new_for_s:.0f}s for {swhid}")
+        else:
+            new_since = None
 
         if status in ("done", "failed"):
             log(f"vault: terminal status={status} {msg}".strip())
@@ -489,7 +503,6 @@ def main() -> None:
         try:
             tarball_path, vault_status = vault_flat_cook_and_download(row.directory_id, out_dir)
 
-            # optional: build a rel_paths list by walking the extracted directory
             rel_paths: List[str] = []
             for p in out_dir.rglob("*"):
                 if p.is_file() and p.name not in ("_MANIFEST.json", "_SWH_VAULT_FLAT.tar.gz"):
@@ -528,6 +541,24 @@ def main() -> None:
             print(f"  OK: extracted_files={len(rel_paths)}")
             print(f"  tarball: {tarball_path}")
             print(f"  manifest: {manifest_path}")
+
+        except SkipRepo as e:
+
+            # Skipping the current repo (SWH doesn't have it ready)
+            prov = {
+                "repo": row.name,
+                "release": row.release,
+                "origin_url": row.origin_url,
+                "tag_ref": row.tag_ref,
+                "snapshot_id": row.snapshot_id,
+                "revision_id": row.revision_id,
+                "directory_id": row.directory_id,
+                "retrieved_at": utc_now_iso(),
+                "status": "skipped",
+                "reason": str(e),
+            }
+            write_provenance(prov)
+            print(f"  SKIP: {e}")
 
         except Exception as e:
             status = "error"
