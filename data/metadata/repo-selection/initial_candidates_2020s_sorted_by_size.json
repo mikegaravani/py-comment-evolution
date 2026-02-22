@@ -110,6 +110,11 @@
     "repo_creation_date": "2014"
   },
   {
+    "name": "pytask-dev/pytask",
+    "python_bytes": 795553,
+    "repo_creation_date": "2020"
+  },
+  {
     "name": "PyCQA/isort",
     "python_bytes": 795796,
     "repo_creation_date": "2013"
@@ -122,6 +127,11 @@
   {
     "name": "pdm-project/pdm",
     "python_bytes": 1277803,
+    "repo_creation_date": "2019"
+  },
+  {
+    "name": "textualize/rich",
+    "python_bytes": 1697826,
     "repo_creation_date": "2019"
   },
   {

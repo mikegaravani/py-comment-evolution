@@ -11,3 +11,7 @@ pip-audit,new_2020s,https://github.com/pypa/pip-audit,2.9.0,2025-04-07T12:36:59-
 typer,new_2020s,https://github.com/fastapi/typer,0.19.0,2025-09-20T09:54:12+02:00,refs/tags/0.19.0,,13619fb4a35ee92a276215889c68ea03633c24dd,47fa9af9614741f2c1b9a69f134203055d89c1b0
 pdm,new_2020s,https://github.com/pdm-project/pdm,2.26.0,2025-10-11T09:45:35+08:00,refs/tags/2.26.0,8d731482be845273145302a0eaa5d61a53f9ba3f,bd8c5d30c6b8b8a615f82605e63f1391e5fabfa2,6ba48fc6c930bb3f20784ab065164f8a82d764e4
 textualize,new_2020s,https://github.com/Textualize/textual,1.0.0,2024-12-12T10:41:24+00:00,refs/tags/1.0.0,,f888e6ae4afc74c8b4d9bc4a18d17071b453a780,27fb020b7dae4683ef7b6a41460b0c3456c5a258
+rich,new_2020s,https://github.com/Textualize/rich,14.0.0,2025-03-30T15:14:41+01:00,refs/tags/v14.0.0,09e6b063cdd2e5bf1af38fa34ea86bf8d8961849,72e3bb33d44fd96881f7742b77137983907a942f,17252f25ff08d6d1a33ab14b8d6ccecdc26addd9
+build,new_2020s,https://github.com/pypa/build,1.4.0,2026-01-08T11:35:57-05:00,refs/tags/1.4.0,fe0abe4579a61f72bb6c998bf3dee365911e53ce,54f238d1664124e06a68c6c22fd5b1418fa5feb2,e09f3ac0100e897a4ee2341844f59515bf97e692
+poetry-plugin-export,new_2020s,https://github.com/python-poetry/poetry-plugin-export,1.10.0,2026-01-18T15:20:27+01:00,refs/tags/1.10.0,afbea34482e81bbdfca4bca6136e841a5121b357,ac66c08a6fcfd140b23c0133f4886999479cc0b9,9a00228714b7969724277b1cb38538330ca374b6
+pytask,new_2020s,https://pypi.org/project/pytask/,0.5.8,2025-12-30T17:03:18+00:00,releases/0.5.8,4c1c75a5de16f525dcdfff0ce28700a43a51d946,,7aa1bba9a44b5eec1ea81f82cf6846805c1510f1

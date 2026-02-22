@@ -67,6 +67,22 @@ repos:
     url: "https://github.com/Textualize/textual"
     group: "new_2020s"
     release: "1.0.0"
+  - name: "rich"
+    url: "https://github.com/Textualize/rich"
+    group: "new_2020s"
+    release: "14.0.0"
+  - name: "build"
+    url: "https://github.com/pypa/build"
+    group: "new_2020s"
+    release: "1.4.0"
+  - name: "poetry-plugin-export"
+    url: "https://github.com/python-poetry/poetry-plugin-export"
+    group: "new_2020s"
+    release: "1.10.0"
+  - name: "pytask"
+    url: "https://pypi.org/project/pytask/"
+    group: "new_2020s"
+    release: "0.5.8"
 
 # # Default include/exclude rules
 # default_paths:

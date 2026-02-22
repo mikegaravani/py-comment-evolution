@@ -660,5 +660,45 @@
     "languages_bytes": {
       "Python": 280985
     }
+  },
+  {
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": "",
+    "name": "textualize/rich",
+    "url": "https://github.com/Textualize/rich",
+    "repo_creation_date": "2019-11-10T15:28:09Z",
+    "data_collection_timestamp": "2026-02-22T22:25:55Z",
+    "commits_number": 4410,
+    "stars_number": 55563,
+    "releases_number": 175,
+    "contributors_number": 286,
+    "main_language": "Python",
+    "main_language_percentage": 99.9,
+    "languages_bytes": {
+      "Python": 1697826,
+      "Batchfile": 799,
+      "Makefile": 307
+    }
+  },
+  {
+    "notes": "",
+    "repo_time_period": "2020s",
+    "is_chosen_candidate": "",
+    "name": "pytask-dev/pytask",
+    "url": "https://github.com/pytask-dev/pytask",
+    "repo_creation_date": "2020-06-24T14:27:51Z",
+    "data_collection_timestamp": "2026-02-22T22:57:52Z",
+    "commits_number": 671,
+    "stars_number": 138,
+    "releases_number": 59,
+    "contributors_number": 13,
+    "main_language": "Python",
+    "main_language_percentage": 98.9,
+    "languages_bytes": {
+      "Python": 795553,
+      "Jupyter Notebook": 7485,
+      "Just": 980
+    }
   }
 ]
