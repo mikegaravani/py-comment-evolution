@@ -7,3 +7,7 @@ coverage,old_2000s,https://pypi.org/project/coverage/,3.0,2009-06-14T03:36:26+00
 nose,old_2000s,https://github.com/nose-devs/nose,0.11.1,2009-05-13T20:00:52-04:00,refs/tags/release_0.11.1,ad1333756f3208d0a5406a075efe60b4786d751f,c0e29e35b3e698f4ac099a76c6e187b9f04cdf99,7f6051bfe88ae470efb6abda2994e30c84694843
 pygments,old_2000s,https://pypi.org/project/Pygments/,1.0,2008-11-23T18:07:41+00:00,releases/1.0,350ac8a5d0284be34165d1664850808ba65a235d,,a82251310eff87d529dbe2502e07bdfd07c9a48b
 ipython,old_2000s,https://pypi.org/project/ipython/,0.10.1,2010-10-12T08:40:01+00:00,releases/0.10.1/ipython-0.10.1.tar.gz,ef7ff594cc00cd82b5da62e4422c0777ceebcdc1,,90353396ee140362f37d8e7bee19b693ea16438a
+pip-audit,new_2020s,https://github.com/pypa/pip-audit,2.9.0,2025-04-07T12:36:59-04:00,refs/tags/v2.9.0,ab6908537119ba6c84b43f13f42193c0c15816e3,89ba95983281980506b662fb08cea634d75907c5,03f6d430cc3a76d56be02f6d49fd9b2914a2208b
+typer,new_2020s,https://github.com/fastapi/typer,0.19.0,2025-09-20T09:54:12+02:00,refs/tags/0.19.0,,13619fb4a35ee92a276215889c68ea03633c24dd,47fa9af9614741f2c1b9a69f134203055d89c1b0
+pdm,new_2020s,https://github.com/pdm-project/pdm,2.26.0,2025-10-11T09:45:35+08:00,refs/tags/2.26.0,8d731482be845273145302a0eaa5d61a53f9ba3f,bd8c5d30c6b8b8a615f82605e63f1391e5fabfa2,6ba48fc6c930bb3f20784ab065164f8a82d764e4
+textualize,new_2020s,https://github.com/Textualize/textual,1.0.0,2024-12-12T10:41:24+00:00,refs/tags/1.0.0,,f888e6ae4afc74c8b4d9bc4a18d17071b453a780,27fb020b7dae4683ef7b6a41460b0c3456c5a258
