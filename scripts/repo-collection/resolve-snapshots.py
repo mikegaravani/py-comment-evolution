@@ -194,13 +194,15 @@ def tag_candidates(repo_name: str, release: str) -> List[str]:
 
     seen = set()
     out: List[str] = []
+    out.append(f'releases/{r}')
     for base in bases:
         for pref in prefixes:
             for suff in suffixes:
                 ref = f"{pref}{base}{suff}"
                 if ref not in seen:
-                    seen.add(ref)
-                    out.append(ref)
+                    pass
+                    # seen.add(ref)
+                    # out.append(ref)
     return out
 
 

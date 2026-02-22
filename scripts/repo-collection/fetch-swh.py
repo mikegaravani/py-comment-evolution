@@ -262,7 +262,7 @@ def vault_flat_cook_and_download(
     *,
     poll_interval_s: float = 3.0,
     max_poll_s: float = 60 * 60,
-    skip_if_new_for_s: float = 10,
+    skip_if_new_for_s: float = 5,
 ) -> Tuple[Path, Dict[str, Any]]:
     """
     Cook + download + extract a flat tarball for directory_id into out_dir.
@@ -333,6 +333,9 @@ def vault_flat_cook_and_download(
             tarball_path.write_bytes(r2.content)
         else:
             r.raise_for_status()
+            # debugging
+            log(f"vault: download headers content-type={r.headers.get('Content-Type')}"
+                f"content-disposition={r.headers.get('Content-Disposition')}")
             total = int(r.headers.get("Content-Length", "0") or 0)
             written = 0
             t0 = time.time()
@@ -353,11 +356,15 @@ def vault_flat_cook_and_download(
                         if written // (10 * 1024 * 1024) != (written - len(chunk)) // (10 * 1024 * 1024):
                             log(f"download: {written/1024/1024:.0f}MB")
 
-    with tarfile.open(tarball_path, "r:gz") as tf:
-        # ensure no path traversal inside tar
+    head = tarball_path.read_bytes()[:512]
+    if head.lstrip().startswith((b"{", b"[")) or b"<html" in head.lower():
+        raise FetchError(f"Vault download is not a tar archive; first bytes={head[:120]!r}")
+
+    with tarfile.open(tarball_path, "r:*") as tf:
+        out_dir_resolved = out_dir.resolve()
         for member in tf.getmembers():
             member_path = (out_dir / member.name).resolve()
-            if not str(member_path).startswith(str(out_dir.resolve())):
+            if not str(member_path).startswith(str(out_dir_resolved)):
                 raise FetchError(f"Unsafe path in tar: {member.name}")
         log(f"vault: extracting {tarball_path}")
         tf.extractall(out_dir)

@@ -34,6 +34,18 @@ repos:
     url: "https://github.com/SCons/scons"
     group: "old_2000s"
     release: "1.0.0"
+  - name: "coverage"
+    url: "https://pypi.org/project/coverage/"
+    group: "old_2000s"
+    release: "3.0"
+  - name: "nose"
+    url: "https://github.com/nose-devs/nose"
+    group: "old_2000s"
+    release: "0.11.1"
+  - name: "pygments"
+    url: "https://pypi.org/project/Pygments/"
+    group: old_2000s
+    release: "1.0"
 
 # # Default include/exclude rules
 # default_paths:
