@@ -9,12 +9,8 @@ dataset:
   groups:
     old_2000s:
       label: "2000s"
-      start_year: 2000
-      end_year: 2009
     new_2020s:
       label: "2020s"
-      start_year: 2020
-      end_year: 2029
 
 repos:
   - name: "pip"
