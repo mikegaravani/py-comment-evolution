@@ -90,3 +90,27 @@ def log_jsonl(log_path: Path, record: dict) -> None:
     ensure_dir(log_path.parent)
     with log_path.open("a", encoding="utf-8") as f:
         f.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+def read_manifest(snapshot_root: Path) -> Optional[dict]:
+    """
+    Read <snapshot_root>/_MANIFEST.json if present, else None.
+    Returns parsed JSON dict or None on missing/parse errors.
+    """
+    manifest_path = snapshot_root / "_MANIFEST.json"
+    if not manifest_path.exists():
+        return None
+    try:
+        with manifest_path.open("r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return None
+
+
+def manifest_status_is_success(snapshot_root: Path) -> bool:
+    """
+    True iff _MANIFEST.json exists and has {"status": "success"}.
+    AKA the repo is completely materialized and ready for processing.
+    """
+    m = read_manifest(snapshot_root)
+    return bool(m) and (m.get("status") == "success")
