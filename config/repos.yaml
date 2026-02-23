@@ -79,27 +79,3 @@ repos:
     url: "https://pypi.org/project/pytask/"
     group: "new_2020s"
     release: "0.5.8"
-
-# # Default include/exclude rules
-# default_paths:
-#   include_globs:
-#     - "**/*.py"
-#   exclude_globs:
-#     # common virtualenv/build/cache
-#     - "**/.venv/**"
-#     - "**/venv/**"
-#     - "**/__pycache__/**"
-#     - "**/.tox/**"
-#     - "**/build/**"
-#     - "**/dist/**"
-#     - "**/.eggs/**"
-#     # common vendored/third party
-#     - "**/vendor/**"
-#     - "**/vendors/**"
-#     - "**/third_party/**"
-#     - "**/third-party/**"
-#     - "**/extern/**"
-#     - "**/external/**"
-#     # docs output
-#     - "**/_build/**"
-# # Repos to be included

@@ -1,0 +1,35 @@
+exclude_dirs:
+  - ".git"
+  - ".hg"
+  - ".svn"
+  - "__pycache__"
+  - ".tox"
+  - "venv"
+  - ".venv"
+  - "site-packages"
+  - "build"
+  - "dist"
+  - "vendor"
+  - "vendors"
+  - "third_party"
+  - "node_modules"
+
+exclude_files:
+  - "_MANIFEST.json" # file created in raw at fetch time, not originally in the snapshot
+
+classify_paths:
+  tests:
+    - "test"
+    - "tests"
+    - "testing"
+  docs:
+    - "docs"
+    - "doc"
+    - "documentation"
+    - "wiki"
+  vendor:
+    - "vendor"
+    - "vendors"
+    - "third-party"
+    - "third_party"
+    - "external"
