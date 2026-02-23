@@ -290,8 +290,6 @@ def materialize_tree(
             if not isinstance(name, str) or not isinstance(typ, str) or not isinstance(target, str):
                 continue
 
-            # names are bytes-ish sometimes; SWH returns strings
-            # Guard: clean path components
             name = name.replace("/", "_")
 
             if typ == "dir":
@@ -314,6 +312,9 @@ def materialize_tree(
                     data = content_raw_bytes(target)
                     out_path.write_bytes(data)
                     written += 1
+
+                    print(f"  FETCHED file: {rel} ({len(data)} bytes)")
+
                 except Exception as ex:
                     failures.append(
                         {
@@ -368,6 +369,12 @@ def main() -> None:
 
         # TODO remove this scons avoider
         if row.name == "scons":
+            print(f"\nSkipping {row.name} release={row.release} (scons issue, will be dealt with later)")
+            continue
+        if row.name == "rich":
+            print(f"\nSkipping {row.name} release={row.release} (scons issue, will be dealt with later)")
+            continue
+        if row.name == "textualize":
             print(f"\nSkipping {row.name} release={row.release} (scons issue, will be dealt with later)")
             continue
 
