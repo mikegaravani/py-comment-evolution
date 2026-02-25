@@ -4,7 +4,7 @@ Script to get important information about the various repositories.
 Inputs:
     data/metadata/snapshots.csv
 Outputs: 
-    data/processed/file-inventory.parquet
+    data/processed/inventory/<repo-name>-file-inventory.csv (one row per file of the snapshot)
     data/processed/repo-census.csv
 
 USAGE:
@@ -15,14 +15,16 @@ USAGE:
     python scripts/repo-census/repo-census.py --only <repo_name>
 '''
 # TODO: make already run repo skip
-# TODO: jsonl log doesnt exit?
-# TODO: parquet is dumb change to csv?
 # TODO: do we compute loc for py files in tests or or loc for everything in tests? cause I guess we only need py loc in tests
+
+# TODO: go back to parquet or csv.gz for inventory?
+
 from __future__ import annotations
 
 import argparse
 from datetime import datetime, timezone
 from pathlib import Path
+import re
 
 import pandas as pd
 
@@ -44,33 +46,33 @@ from _lib.walk import (
 
 def build_file_inventory(
     raw_root: Path,
-    snapshots: list[SnapshotRow],
+    row: SnapshotRow,
     log_path: Path,
 ) -> pd.DataFrame:
     """
-    Return a huge dataframe (data/processed/inventory-files.parquet) with one row per file across all repo snapshots.
+    Return a huge dataframe (data/processed/inventory/<repo-name>-file-inventory.csv) with one row per file of the current snapshot.
     """
     records: list[dict] = []
 
     run_ts = datetime.now(timezone.utc).isoformat()
 
-    for row in snapshots:
-        snap_root = resolve_snapshot_root(raw_root, row)
-        if snap_root is None:
-            log_jsonl(
-                log_path,
-                {
-                    "ts": run_ts,
-                    "level": "error",
-                    "event": "snapshot_root_missing",
-                    "repo": row.name,
-                    "snapshot_id": row.snapshot_id,
-                    "directory_id": row.directory_id,
-                    "release": row.release,
-                },
-            )
-            continue
+    snap_root = resolve_snapshot_root(raw_root, row)
 
+    if snap_root is None:
+        log_jsonl(
+            log_path,
+            {
+                "ts": run_ts,
+                "level": "error",
+                "event": "snapshot_root_missing",
+                "repo": row.name,
+                "snapshot_id": row.snapshot_id,
+                "directory_id": row.directory_id,
+                "release": row.release,
+            },
+        )
+
+    else:
         for abs_path in iter_files(snap_root):
             try:
                 rel_path = abs_path.relative_to(snap_root)
@@ -239,7 +241,7 @@ def main() -> None:
     # Defaults are probably always gonna be correct, so don't use these!!
     ap.add_argument("--snapshots-csv", default="data/metadata/snapshots.csv", help="Path to snapshots.csv")
     ap.add_argument("--raw-root", default="data/raw/software_heritage", help="Root of materialized SWH trees")
-    ap.add_argument("--out-inventory", default="data/processed/file-inventory.parquet", help="Output parquet (per-file)")
+    ap.add_argument("--out-inventory", default="data/processed/inventory/", help="Output csv (per-file)")
     ap.add_argument("--out-census", default="data/processed/repo-census.csv", help="Output csv (per-snapshot summary)")
     ap.add_argument("--log", default="logs/repo-census.jsonl", help="JSONL log path")
     
@@ -258,7 +260,7 @@ def main() -> None:
     out_census = Path(args.out_census)
     log_path = Path(args.log)
 
-    ensure_dir(out_inventory.parent)
+    ensure_dir(out_inventory)
     ensure_dir(out_census.parent)
     ensure_dir(log_path.parent)
 
@@ -282,22 +284,47 @@ def main() -> None:
         snapshots = [row for row in snapshots if row.name == args.only]
         print(f"Snapshots selected: {len(snapshots)}")
 
-    inventory = build_file_inventory(
-        raw_root=raw_root,
-        snapshots=snapshots,
-        log_path=log_path,
-    )
+    
+    # Creation of INVENTORY for each snapshot
 
-    # Write inventory parquet
-    inventory.to_parquet(out_inventory, index=False)
+    census_parts: list[pd.DataFrame] = []
 
-    # Write census CSV
-    census = summarize_repo_census(inventory, snapshots)
-    census.to_csv(out_census, index=False)
+    
+    for row in snapshots:
+        safe_name = re.sub(r"[^a-zA-Z0-9._-]+", "_", row.name).strip("_")
 
-    print(f"Wrote inventory: {out_inventory} ({len(inventory):,} files)")
-    print(f"Wrote census:    {out_census} ({len(census):,} snapshots)")
-    print(f"Log:            {log_path}")
+        inv_path = out_inventory / f"{safe_name}-file-inventory.csv"
+
+        if inv_path.exists():
+            print(f"Inventory already exists for {row.name}, skipping: {inv_path}")
+            inventory = pd.read_csv(inv_path)
+        else:
+            inventory = build_file_inventory(
+                raw_root=raw_root,
+                row=row,
+                log_path=log_path,
+            )
+
+            inventory.to_csv(inv_path, index=False)
+            print(f"Wrote inventory: {inv_path} ({len(inventory):,} files)")
+
+        # Writing census for current 
+        if  out_census.exists():
+            all_census = pd.read_csv(out_census)
+            
+        if out_census.exists() and row.snapshot_id in all_census["snapshot_id"].values:
+            print(f"Census already exists for {row.name}, skipping.")
+            continue
+        
+        census_parts.append(summarize_repo_census(inventory, [row]))
+
+    # Concatenating all census parts and writing final census
+    census = pd.concat(census_parts, ignore_index=True) if census_parts else pd.DataFrame()
+    write_header = not out_census.exists()
+    census.to_csv(out_census, mode="a", header=write_header, index=False)
+
+    print(f"Updated census:  {out_census} (+{len(census):,} rows)")
+    print(f"Log:             {log_path}")
 
 
 if __name__ == "__main__":
