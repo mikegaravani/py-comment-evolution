@@ -152,7 +152,7 @@ def summarize_repo_census(file_inventory: pd.DataFrame, snapshots: list[Snapshot
     if file_inventory.empty:
         return pd.DataFrame(
             columns=[
-                "name", "group", "snapshot_id", "release", "release_date",
+                "name", "group", "directory_id", "release", "release_date",
                 "n_files_total", "n_files_py",
                 "loc_total_all_text", "loc_total_py",
                 "n_files_py_tests", "loc_py_tests",
@@ -165,7 +165,7 @@ def summarize_repo_census(file_inventory: pd.DataFrame, snapshots: list[Snapshot
     inv = file_inventory.copy()
     inv["is_text"] = ~inv["is_binary"]
 
-    keys = ["name", "group", "snapshot_id", "release", "release_date"]
+    keys = ["name", "group", "directory_id", "release", "release_date"]
 
     def n_where(mask: pd.Series) -> int:
         return int(mask.sum())
@@ -200,7 +200,7 @@ def summarize_repo_census(file_inventory: pd.DataFrame, snapshots: list[Snapshot
             {
                 "name": k[0],
                 "group": k[1],
-                "snapshot_id": k[2],
+                "directory_id": k[2],
                 "release": k[3],
                 "release_date": k[4],
                 "n_files_total": n_files_total,
@@ -269,12 +269,14 @@ def main() -> None:
     print(f"Snapshots loaded:   {len(snapshots_all)}")
     snapshots = snapshots_all
 
-    snapshots = [
+    successful = [
         row
         for row in snapshots
         if (root := resolve_snapshot_root(raw_root, row)) is not None
         and manifest_status_is_success(root)
     ]
+
+    snapshots = successful
     # print snapshots with successful _MANIFEST.json
     print(f"Snapshots success:  {len(snapshots)}")
 
@@ -283,6 +285,8 @@ def main() -> None:
         print(f"Filtering to repo:  {args.only}")
         snapshots = [row for row in snapshots if row.name == args.only]
         print(f"Snapshots selected: {len(snapshots)}")
+        if not snapshots:
+            print("No repos elegible. You probably chose a repo that doesn't have a successful _MANFEST.json, or a repo name that doesn't exist.")
 
     
     # Creation of INVENTORY for each snapshot
@@ -308,22 +312,26 @@ def main() -> None:
             inventory.to_csv(inv_path, index=False)
             print(f"Wrote inventory: {inv_path} ({len(inventory):,} files)")
 
+        # This works: leave like this
         # Writing census for current 
         if  out_census.exists():
-            all_census = pd.read_csv(out_census)
+            if out_census.stat().st_size:
+                all_census = pd.read_csv(out_census)
             
-        if out_census.exists() and row.snapshot_id in all_census["snapshot_id"].values:
-            print(f"Census already exists for {row.name}, skipping.")
-            continue
+        if out_census.exists():
+            if out_census.stat().st_size and row.name in all_census["name"].values:
+                print(f"Census already exists for {row.name}, skipping.")
+                continue
         
         census_parts.append(summarize_repo_census(inventory, [row]))
 
     # Concatenating all census parts and writing final census
     census = pd.concat(census_parts, ignore_index=True) if census_parts else pd.DataFrame()
-    write_header = not out_census.exists()
+    write_header = not out_census.exists() or out_census.stat().st_size == 0
     census.to_csv(out_census, mode="a", header=write_header, index=False)
 
-    print(f"Updated census:  {out_census} (+{len(census):,} rows)")
+    if not census.empty:
+        print(f"Updated census:  {out_census} (+{len(census):,} rows)")
     print(f"Log:             {log_path}")
 
 

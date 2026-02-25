@@ -22,6 +22,8 @@ classify_paths:
     - "test"
     - "tests"
     - "testing"
+    - "unit_tests"
+    - "functional_tests"
   docs:
     - "docs"
     - "doc"
