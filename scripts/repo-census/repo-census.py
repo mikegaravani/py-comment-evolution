@@ -14,7 +14,6 @@ USAGE:
     # Process only one repo (exact name match)
     python scripts/repo-census/repo-census.py --only <repo_name>
 '''
-# TODO: make already run repo skip
 # TODO: do we compute loc for py files in tests or or loc for everything in tests? cause I guess we only need py loc in tests
 
 # TODO: go back to parquet or csv.gz for inventory?
