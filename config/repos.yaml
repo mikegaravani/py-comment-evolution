@@ -9,12 +9,8 @@ dataset:
   groups:
     old_2000s:
       label: "2000s"
-      start_year: 2000
-      end_year: 2009
     new_2020s:
       label: "2020s"
-      start_year: 2020
-      end_year: 2029
 
 repos:
   - name: "pip"
@@ -83,27 +79,3 @@ repos:
     url: "https://pypi.org/project/pytask/"
     group: "new_2020s"
     release: "0.5.8"
-
-# # Default include/exclude rules
-# default_paths:
-#   include_globs:
-#     - "**/*.py"
-#   exclude_globs:
-#     # common virtualenv/build/cache
-#     - "**/.venv/**"
-#     - "**/venv/**"
-#     - "**/__pycache__/**"
-#     - "**/.tox/**"
-#     - "**/build/**"
-#     - "**/dist/**"
-#     - "**/.eggs/**"
-#     # common vendored/third party
-#     - "**/vendor/**"
-#     - "**/vendors/**"
-#     - "**/third_party/**"
-#     - "**/third-party/**"
-#     - "**/extern/**"
-#     - "**/external/**"
-#     # docs output
-#     - "**/_build/**"
-# # Repos to be included
