@@ -7,10 +7,7 @@ exclude_dirs:
   - "venv"
   - ".venv"
   - "site-packages"
-  - "build"
   - "dist"
-  - "vendor"
-  - "vendors"
   - "third_party"
   - "node_modules"
 
