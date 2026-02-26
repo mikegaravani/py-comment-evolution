@@ -8,7 +8,7 @@ Outputs:
     data/processed/repo-census.csv
 
 USAGE:
-    # Process all repos (could be heavy)
+    # Process all repos
     python scripts/repo-census/repo-census.py --all
 
     # Process only one repo (exact name match)
