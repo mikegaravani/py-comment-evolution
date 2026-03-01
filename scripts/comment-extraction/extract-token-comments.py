@@ -166,9 +166,6 @@ def main() -> None:
     if len(df_comments) > 0:
         print("\nQuick sanity:")
         print(df_comments["kind"].value_counts().to_string())
-        print("\nTop pragmatic kinds:")
-        if "pragmatic_kinds" in df_comments.columns:
-            print(df_comments[df_comments["is_pragmatic"]]["pragmatic_kinds"].value_counts().head(10).to_string())
 
     if args.write_file_status:
         status_path = out_path.parent / f"file_status_token_{args.subset}.parquet"

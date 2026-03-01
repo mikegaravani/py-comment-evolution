@@ -6,7 +6,7 @@ import tokenize
 from dataclasses import dataclass
 from typing import Iterable, Optional
 
-from .heuristics import extract_features
+# from .heuristics import extract_features
 
 
 @dataclass(frozen=True)
@@ -33,17 +33,6 @@ class CommentRow:
     line_text: str        # full line content
     code_prefix: str      # portion before '#'
     prefix_has_code: bool
-
-    # enrichment features
-    has_url: bool
-    has_todo: bool
-    has_fixme: bool
-    has_hack: bool
-    starts_with_capital: bool
-    looks_like_commented_code: bool
-    is_pragmatic: bool
-    pragmatic_kinds: str
-    is_type_comment: bool
 
     char_len: int
     word_len: int
@@ -100,8 +89,6 @@ def iter_token_comments(
             prefix_has_code, prefix = _classify_inline(line_text, col)
             kind = "inline" if prefix_has_code else "full_line"
 
-            feats = extract_features(text)
-
             # Lengths
             char_len = len(text_stripped)
             word_len = len(text_stripped.split()) if text_stripped else 0
@@ -124,15 +111,7 @@ def iter_token_comments(
                 line_text=line_text,
                 code_prefix=prefix,
                 prefix_has_code=prefix_has_code,
-                has_url=feats.has_url,
-                has_todo=feats.has_todo,
-                has_fixme=feats.has_fixme,
-                has_hack=feats.has_hack,
-                starts_with_capital=feats.starts_with_capital,
-                looks_like_commented_code=feats.looks_like_commented_code,
-                is_pragmatic=feats.is_pragmatic,
-                pragmatic_kinds=feats.pragmatic_kinds,
-                is_type_comment=feats.is_type_comment,
+
                 char_len=char_len,
                 word_len=word_len,
             )
