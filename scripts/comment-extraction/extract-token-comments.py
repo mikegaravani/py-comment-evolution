@@ -72,10 +72,13 @@ def main() -> None:
     subset_col = SUBSET_TO_COLUMN[args.subset]
     out_path = args.out
     if out_path is None:
-        out_path = f"data/processed/tokenized_data/comments_token_{args.subset}.parquet"
+        out_dir = Path("data/processed/tokenized_data") / args.subset
+        out_path = out_dir / "comments_token.parquet"
+    else:
+        out_path = Path(out_path)
+        out_dir = out_path.parent
 
-    out_path = Path(out_path)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     df_index = load_file_index(args.file_index)
 
@@ -168,11 +171,12 @@ def main() -> None:
         print(df_comments["kind"].value_counts().to_string())
 
     if args.write_file_status:
-        status_path = out_path.parent / f"file_status_token_{args.subset}.parquet"
+        status_path = out_dir / "file_status_token.parquet"
         df_status = pd.DataFrame(file_status_rows)
         df_status.to_parquet(status_path, index=False)
         print(f"Wrote: {status_path}")
-        summary_path = out_path.parent / f"file_status_token_{args.subset}_summary.csv"
+        
+        summary_path = out_dir / "file_status_token_summary.csv"
         df_summary = (
             df_status.groupby(["repo", "group", "subset"], as_index=False)
             .agg(
