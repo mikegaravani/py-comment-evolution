@@ -1,1 +1,3 @@
--> Docs class is missing from the census and the census jupyter notebook!! Add it!
+TOKENIZATION TODO:
+  - treat multi-line comments as one comment
+  - review heuristics and probably move them to a different script directory
