@@ -1,19 +1,19 @@
-'''
-Token extraction using Python's tokenize module.
+"""
+Docstring extraction using AST (fast) with Parso fallback for old Python code (for example Python 2).
 
 USAGE:
     # core python only
-    python scripts/comment-extraction/extract-token-comments.py --subset core --write-file-status
+    python scripts/comment-extraction/extract-docstring-comments.py --subset core --write-file-status
 
     # core + tests
-    python scripts/comment-extraction/extract-token-comments.py --subset core_plus_tests --write-file-status
+    python scripts/comment-extraction/extract-docstring-comments.py --subset core_plus_tests --write-file-status
 
     # tests only
-    python scripts/comment-extraction/extract-token-comments.py --subset tests_only --write-file-status
+    python scripts/comment-extraction/extract-docstring-comments.py --subset tests_only --write-file-status
 
     # all python
-    python scripts/comment-extraction/extract-token-comments.py --subset all_py --write-file-status
-'''
+    python scripts/comment-extraction/extract-docstring-comments.py --subset all_py --write-file-status
+"""
 
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ from pathlib import Path
 import pandas as pd
 
 from _lib.io import load_file_index, read_text_file, row_to_file_row
-from _lib.tokenize_runner import iter_token_comments
+from _lib.docstring_runner import iter_docstrings
 
 
 SUBSET_TO_COLUMN = {
@@ -36,15 +36,13 @@ SUBSET_TO_COLUMN = {
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Extract '#' comments using Python tokenize from python files in file_index.parquet."
+        description="Extract docstrings from python files in file_index.parquet (AST + Parso fallback)."
     )
-    # Default is fine
     parser.add_argument(
         "--file-index",
         default="data/processed/file_index/file_index.parquet",
         help="Path to canonical file_index.parquet",
     )
-
     parser.add_argument(
         "--subset",
         choices=list(SUBSET_TO_COLUMN.keys()),
@@ -54,7 +52,7 @@ def main() -> None:
     parser.add_argument(
         "--out",
         default=None,
-        help="Output parquet path. Default: data/processed/tokenized_data/comments_token_<subset>.parquet",
+        help="Output parquet path. Default: data/processed/tokenized_data/<subset>/docstrings.parquet",
     )
     parser.add_argument(
         "--limit",
@@ -65,15 +63,16 @@ def main() -> None:
     parser.add_argument(
         "--write-file-status",
         action="store_true",
-        help="Also write per-file status parquet (tokenize ok/read errors counts).",
+        help="Also write per-file status parquet (parse ok/read errors counts).",
     )
     args = parser.parse_args()
 
     subset_col = SUBSET_TO_COLUMN[args.subset]
+
     out_path = args.out
     if out_path is None:
-        out_dir = Path("data/processed/tokenized_data") / args.subset
-        out_path = out_dir / "comments_token.parquet"
+        out_dir = Path("data/processed/docstring_data") / args.subset
+        out_path = out_dir / "docstrings.parquet"
     else:
         out_path = Path(out_path)
         out_dir = out_path.parent
@@ -81,13 +80,12 @@ def main() -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     df_index = load_file_index(args.file_index)
-
     df_sel = df_index[df_index[subset_col]].copy()
     if args.limit is not None:
         df_sel = df_sel.head(args.limit)
 
-    comment_rows = []
-    file_status_rows = []
+    doc_rows: list[dict] = []
+    file_status_rows: list[dict] = []
 
     for _, r in df_sel.iterrows():
         fr = row_to_file_row(r)
@@ -104,17 +102,23 @@ def main() -> None:
                     "subset": args.subset,
                     "read_ok": False,
                     "read_error": read_err,
-                    "tokenize_ok": False,
-                    "n_comments": 0,
+                    "parse_ok": False,
+                    "parse_backend": None,
+                    "parse_version": None,
+                    "parse_error": None,
+                    "n_docstrings": 0,
                 }
             )
             continue
 
-        n_comments = 0
-        tokenize_ok = True
+        n_docstrings = 0
+        parse_ok = True
+        parse_backend = None
+        parse_version = None
+        parse_error = None
 
         try:
-            for crow in iter_token_comments(
+            for drow in iter_docstrings(
                 source_text=text,
                 file_id=fr.file_id,
                 repo=fr.name,
@@ -125,10 +129,23 @@ def main() -> None:
                 snapshot_root=fr.snapshot_root,
                 path_rel=fr.path_rel,
             ):
-                comment_rows.append(crow.__dict__)
-                n_comments += 1
+                # backend/version will be consistent within a file (ast or parso)
+                parse_backend = drow.parse_backend
+                parse_version = drow.parse_version
+
+                doc_rows.append(drow.__dict__)
+                n_docstrings += 1
+
+            # If there were no docstrings, iter_docstrings may still have parsed successfully.
+            # parse_backend might still be None; treat as AST success (default attempt).
+            if parse_backend is None:
+                parse_backend = "ast"
+                parse_version = None
+
         except Exception as e:
-            tokenize_ok = False
+            parse_ok = False
+            parse_error = f"{type(e).__name__}"
+
             file_status_rows.append(
                 {
                     "file_id": fr.file_id,
@@ -139,9 +156,11 @@ def main() -> None:
                     "subset": args.subset,
                     "read_ok": True,
                     "read_error": read_err,
-                    "tokenize_ok": False,
-                    "tokenize_error": f"{type(e).__name__}",
-                    "n_comments": n_comments,
+                    "parse_ok": False,
+                    "parse_backend": parse_backend,
+                    "parse_version": parse_version,
+                    "parse_error": parse_error,
+                    "n_docstrings": n_docstrings,
                 }
             )
             continue
@@ -156,34 +175,39 @@ def main() -> None:
                 "subset": args.subset,
                 "read_ok": True,
                 "read_error": read_err,
-                "tokenize_ok": tokenize_ok,
-                "n_comments": n_comments,
+                "parse_ok": parse_ok,
+                "parse_backend": parse_backend,
+                "parse_version": parse_version,
+                "parse_error": parse_error,
+                "n_docstrings": n_docstrings,
             }
         )
 
-    df_comments = pd.DataFrame(comment_rows)
-    df_comments.to_parquet(out_path, index=False)
+    df_docs = pd.DataFrame(doc_rows)
+    df_docs.to_parquet(out_path, index=False)
 
     print(f"Wrote: {out_path}")
-    print(f"Rows (comments): {len(df_comments):,}")
-    if len(df_comments) > 0:
+    print(f"Rows (docstrings): {len(df_docs):,}")
+    if len(df_docs) > 0:
         print("\nQuick sanity:")
-        print(df_comments["kind"].value_counts().to_string())
+        print(df_docs["scope"].value_counts().to_string())
+        print("\nBackend usage:")
+        print(df_docs["parse_backend"].value_counts().to_string())
 
     if args.write_file_status:
-        status_path = out_dir / "file_status_token.parquet"
+        status_path = out_dir / "file_status_docstrings.parquet"
         df_status = pd.DataFrame(file_status_rows)
         df_status.to_parquet(status_path, index=False)
         print(f"Wrote: {status_path}")
-        
-        summary_path = out_dir / "file_status_token_summary.csv"
+
+        summary_path = out_dir / "file_status_docstrings_summary.csv"
         df_summary = (
             df_status.groupby(["repo", "group", "subset"], as_index=False)
             .agg(
                 n_files=("file_id", "count"),
                 n_read_ok=("read_ok", "sum"),
-                n_tokenize_ok=("tokenize_ok", "sum"),
-                n_comments=("n_comments", "sum"),
+                n_parse_ok=("parse_ok", "sum"),
+                n_docstrings=("n_docstrings", "sum"),
             )
         )
         df_summary.to_csv(summary_path, index=False)
