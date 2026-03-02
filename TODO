@@ -2,6 +2,6 @@ TOKENIZATION TODO:
   - treat multi-line comments as one comment
   - review heuristics and probably move them to a different script directory
 
-RIGHT NOW:
-  - implement end_col for tokenize comments
-  - indent_level
+
+RIGHT NOW
+ - make sure every docstring is correctly parsed and add random validation

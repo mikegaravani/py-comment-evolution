@@ -18,24 +18,24 @@ class DocstringRow:
     path_rel: str
 
     scope: str  # "module" | "class" | "function" | "async_function"
-    name: str
-    qualname: str
+    name: str # empty for mudule, else class/function name
+    qualname: str # outer.inner
 
     lineno: int
     col: int
     end_lineno: int
 
     # raw + normalized
-    raw_token: Optional[str]      # best-effort string literal token (parso), else None (ast)
-    docstring: str                # decoded docstring content
-    docstring_stripped: str       # .strip()
+    raw_token: Optional[str] # best-effort string literal token (parso), else None (ast)
+    docstring: str # decoded docstring content
+    docstring_stripped: str # .strip()
 
     char_len: int
     word_len: int
 
     # parse backend
-    parse_backend: str            # "ast" or "parso"
-    parse_version: Optional[str]  # parso grammar version used, else None
+    parse_backend: str # "ast" or "parso"
+    parse_version: Optional[str] # parso grammar version used, else None (if parso is used, it will always be 3.11)
 
 
 # AST extraction (Python 3)
@@ -121,43 +121,40 @@ def _safe_literal_to_str(token_text: str) -> str:
         return token_text
 
 
-def _parso_first_stmt_docstring(node) -> Optional[tuple[int, int, int, str, str]]:
-    """
-    Best-effort docstring detection for a parso node that has a suite of statements.
-    Returns (lineno, end_lineno, col, decoded_docstring, raw_token) if docstring present.
-    """
+def _parso_first_stmt_docstring(node):
     children = getattr(node, "children", None)
     if not children:
         return None
 
-    # Skip leading newlines
     i = 0
-    while i < len(children) and getattr(children[i], "type", None) == "newline":
+    while i < len(children) and getattr(children[i], "type", None) in ("newline", "indent", "dedent"):
         i += 1
     if i >= len(children):
         return None
 
     first_stmt = children[i]
 
-    def find_string_leaf(n):
+    if getattr(first_stmt, "type", None) != "simple_stmt":
+        return None
+
+    stmt_children = [c for c in (first_stmt.children or []) if getattr(c, "type", None) != "newline"]
+    if len(stmt_children) != 1:
+        return None
+
+    only = stmt_children[0]
+
+    string_leaves = []
+    def collect_strings(n):
         if getattr(n, "type", None) == "string":
-            return n
+            string_leaves.append(n)
         for ch in getattr(n, "children", []) or []:
-            got = find_string_leaf(ch)
-            if got is not None:
-                return got
+            collect_strings(ch)
+    collect_strings(only)
+
+    if len(string_leaves) != 1:
         return None
 
-    leaf = find_string_leaf(first_stmt)
-    if leaf is None:
-        return None
-
-    # Ensure it's a bare-string statement:
-    if getattr(first_stmt, "type", None) == "simple_stmt":
-        stmt_children = [c for c in (first_stmt.children or []) if getattr(c, "type", None) != "newline"]
-        if len(stmt_children) != 1:
-            return None
-
+    leaf = string_leaves[0]
     raw = getattr(leaf, "value", None)
     if not isinstance(raw, str):
         return None
@@ -238,7 +235,7 @@ def _iter_docstrings_parso(source_text: str) -> tuple[list[tuple[str, str, str, 
     except ModuleNotFoundError as e:
         raise RuntimeError("parso_not_installed") from e
 
-    versions_to_try = ["3.12", "3.11", "3.10", "3.9", "3.8", "3.7", "2.7"]
+    versions_to_try = ["3.11"]
     last_err: Optional[Exception] = None
     module = None
     used = None
@@ -252,6 +249,7 @@ def _iter_docstrings_parso(source_text: str) -> tuple[list[tuple[str, str, str, 
             last_err = e
 
     if module is None or used is None:
+        print(f"Parso failed to parse with versions {versions_to_try}. Last error: {last_err}")
         raise RuntimeError(f"parso_parse_failed:{type(last_err).__name__ if last_err else 'unknown'}")
 
     found: list[tuple[str, str, str, int, int, int, str, str]] = []
