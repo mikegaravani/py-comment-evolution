@@ -133,7 +133,6 @@ def _parso_first_stmt_docstring(node):
         return None
 
     first_stmt = children[i]
-
     if getattr(first_stmt, "type", None) != "simple_stmt":
         return None
 
@@ -143,26 +142,37 @@ def _parso_first_stmt_docstring(node):
 
     only = stmt_children[0]
 
-    string_leaves = []
-    def collect_strings(n):
-        if getattr(n, "type", None) == "string":
-            string_leaves.append(n)
-        for ch in getattr(n, "children", []) or []:
-            collect_strings(ch)
-    collect_strings(only)
+    leaves = []
+    def collect_leaves(n):
+        ch = getattr(n, "children", None)
+        if ch:
+            for c in ch:
+                collect_leaves(c)
+        else:
+            leaves.append(n)
+    collect_leaves(only)
 
-    if len(string_leaves) != 1:
+    token_leaves = [l for l in leaves if isinstance(getattr(l, "type", None), str)]
+    token_leaves = [l for l in token_leaves if l.type not in ("newline", "endmarker")]
+
+    if not token_leaves:
         return None
 
-    leaf = string_leaves[0]
-    raw = getattr(leaf, "value", None)
-    if not isinstance(raw, str):
+    if any(l.type != "string" for l in token_leaves):
         return None
 
-    decoded = _safe_literal_to_str(raw)
+    raw_parts = [getattr(l, "value", None) for l in token_leaves]
+    if any(not isinstance(p, str) for p in raw_parts):
+        return None
 
-    lineno, col = getattr(leaf, "start_pos", (1, 0))
-    end_pos = getattr(leaf, "end_pos", (lineno, col))
+    decoded_parts = [_safe_literal_to_str(p) for p in raw_parts]
+    decoded = "".join(decoded_parts)
+    raw = "".join(raw_parts)
+
+    first_leaf = token_leaves[0]
+    last_leaf = token_leaves[-1]
+    lineno, col = getattr(first_leaf, "start_pos", (1, 0))
+    end_pos = getattr(last_leaf, "end_pos", (lineno, col))
     end_lineno = int(end_pos[0]) if isinstance(end_pos, tuple) else int(lineno)
 
     return int(lineno), int(end_lineno), int(col), decoded, raw
