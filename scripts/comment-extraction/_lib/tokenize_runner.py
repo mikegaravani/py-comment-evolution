@@ -4,7 +4,7 @@ import io
 import token
 import tokenize
 from dataclasses import dataclass
-from typing import Iterable, Optional
+from typing import Iterable
 
 # from .heuristics import extract_features
 

@@ -1,9 +1,8 @@
 from __future__ import annotations
 
 import ast
-import re
 from dataclasses import dataclass
-from typing import Iterable, Optional, Tuple
+from typing import Iterable, Optional
 
 
 @dataclass(frozen=True)
@@ -152,16 +151,16 @@ def _parso_first_stmt_docstring(node):
             leaves.append(n)
     collect_leaves(only)
 
-    token_leaves = [l for l in leaves if isinstance(getattr(l, "type", None), str)]
-    token_leaves = [l for l in token_leaves if l.type not in ("newline", "endmarker")]
+    token_leaves = [leaf for leaf in leaves if isinstance(getattr(leaf, "type", None), str)]
+    token_leaves = [leaf for leaf in token_leaves if leaf.type not in ("newline", "endmarker")]
 
     if not token_leaves:
         return None
 
-    if any(l.type != "string" for l in token_leaves):
+    if any(leaf.type != "string" for leaf in token_leaves):
         return None
 
-    raw_parts = [getattr(l, "value", None) for l in token_leaves]
+    raw_parts = [getattr(leaf, "value", None) for leaf in token_leaves]
     if any(not isinstance(p, str) for p in raw_parts):
         return None
 
