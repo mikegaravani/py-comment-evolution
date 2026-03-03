@@ -1,0 +1,15 @@
+TOKENIZATION TODO:
+
+  - treat multi-line comments as one comment
+  - review heuristics and probably move them to a different script directory
+
+
+RIGHT NOW
+
+ - make sure every docstring is correctly parsed and add random validation
+
+
+TOKENIZED COMMENTS: ATTRIBUTES FOR CLASSIFICATION
+- is_in_block (whether there are other comment lines around it)
+!! EXAMPLE if is_in_block & text.contains('license'...) -> block.class = license
+- class (shebang, license, todo, fixme, ...)

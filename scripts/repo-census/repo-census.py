@@ -193,6 +193,9 @@ def summarize_repo_census(file_inventory: pd.DataFrame, snapshots: list[Snapshot
         n_files_py_vendor = n_where(g["is_py"] & g["is_vendor"])
         loc_py_vendor = int(g.loc[g["is_py"] & g["is_vendor"] & g["is_text"], "loc_total"].fillna(0).sum())
 
+        n_files_py_docs = n_where(g["is_py"] & g["is_docs"])
+        loc_py_docs = int(g.loc[g["is_py"] & g["is_docs"] & g["is_text"], "loc_total"].fillna(0).sum())
+
         rows.append(
             {
                 "name": k[0],
@@ -208,6 +211,8 @@ def summarize_repo_census(file_inventory: pd.DataFrame, snapshots: list[Snapshot
                 "loc_py_tests": loc_py_tests,
                 "n_files_py_vendor": n_files_py_vendor,
                 "loc_py_vendor": loc_py_vendor,
+                "n_files_py_docs": n_files_py_docs,
+                "loc_py_docs": loc_py_docs,
                 "n_files_encoding_error": n_files_encoding_error,
                 "n_files_binary": n_files_binary,
             }
@@ -224,6 +229,8 @@ def summarize_repo_census(file_inventory: pd.DataFrame, snapshots: list[Snapshot
         "loc_py_tests",
         "n_files_py_vendor",
         "loc_py_vendor",
+        "n_files_py_docs",
+        "loc_py_docs",
         "n_files_encoding_error",
         "n_files_binary",
     ]

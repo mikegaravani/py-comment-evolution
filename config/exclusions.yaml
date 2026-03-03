@@ -26,6 +26,7 @@ classify_paths:
     - "doc"
     - "documentation"
     - "wiki"
+    - "docs_src"
   vendor:
     - "vendor"
     - "vendors"
