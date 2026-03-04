@@ -3,7 +3,6 @@ USAGE:
   python tests/inline-full-line-ratio-comments.py
 """
 
-import sys
 import pandas as pd
 
 from pathlib import Path
