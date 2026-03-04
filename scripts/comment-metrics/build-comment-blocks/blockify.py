@@ -42,6 +42,15 @@ def _ensure_required_columns(df: pd.DataFrame) -> None:
     missing = required - set(df.columns)
     if missing:
         raise ValueError(f"Input parquet missing required columns: {sorted(missing)}")
+    
+
+def _is_shebang_full_line_comment(row: pd.Series) -> bool:
+    raw = str(row.get("raw_token", ""))
+    txt = str(row.get("text", ""))
+    line = str(row.get("line_text", ""))
+
+    # 3 different checks to be extra extra extra safe
+    return raw.lstrip().startswith("#!") or line.lstrip().startswith("#!") or txt.lstrip().startswith("#!")
 
 
 def build_comment_blocks(
@@ -55,6 +64,7 @@ def build_comment_blocks(
     - Full-line comments are merged into blocks if consecutive line numbers and same indentation
     - Inline comments are kept as singleton blocks
     - Blocking is done file after file
+    - !! Shebangs are treated as a singleton block even if they are attached to other comments
     """
 
     _ensure_required_columns(df_comments)
@@ -157,6 +167,15 @@ def build_comment_blocks(
             for _, row in full.iterrows():
                 lineno = int(row["lineno"])
                 col = int(row["col"])
+
+                if lineno == 1 and _is_shebang_full_line_comment(row):
+                    flush_current() # there shouldn't be any
+                    current_members = [row]
+                    prev_lineno, prev_col = lineno, col
+                    flush_current()
+                    current_members = []
+                    prev_lineno, prev_col = None, None
+                    continue
 
                 if not current_members:
                     current_members = [row]
