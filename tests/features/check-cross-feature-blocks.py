@@ -77,3 +77,10 @@ print(f"Total blocks: {n}")
 for k in order:
     pct, count = results[k]
     print(f"{k:18s}: {pct:6.2f}%  ({count:,} blocks)")
+
+print("\nblock_ids where lh & am is True:")
+
+block_ids = df.loc[flags["lh_has_legal_signal"] & flags["am_has_annotation_marker"], "block_id"]
+
+for bid in block_ids:
+    print(f"- {bid}")
