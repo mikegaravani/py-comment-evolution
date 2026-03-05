@@ -19,10 +19,12 @@ flags = df[cols].fillna(False).astype(bool)
 
 n = len(flags)
 if n == 0:
-    raise ValueError("DataFrame has 0 rows; cannot compute percentages.")
+    raise ValueError("DataFrame has 0 blocks; cannot compute percentages.")
 
-def pct(mask: pd.Series) -> float:
-    return 100.0 * mask.mean()
+def pct(mask: pd.Series):
+    count = int(mask.sum())
+    pct = 100.0 * count / n
+    return pct, count
 
 results = {
     # Singles
@@ -70,6 +72,8 @@ order = [
     "sb | lh | am",
 ]
 
-print(f"Total rows: {n}")
+print(f"Total blocks: {n}")
+
 for k in order:
-    print(f"{k:18s}: {results[k]:6.2f}%")
+    pct, count = results[k]
+    print(f"{k:18s}: {pct:6.2f}%  ({count:,} blocks)")
