@@ -1,4 +1,4 @@
-# python tests/check-am.py
+# python tests/features/check-am.py
 
 import pandas as pd
 from pathlib import Path

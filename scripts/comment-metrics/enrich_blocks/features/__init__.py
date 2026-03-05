@@ -4,6 +4,7 @@ from typing import Callable, List
 import pandas as pd
 
 from .annotation_markers import add_annotation_marker_features
+from .legal_headers import add_legal_header_features
 
 
 FeatureFn = Callable[[pd.DataFrame], pd.DataFrame]
@@ -14,5 +15,6 @@ def get_feature_pipeline() -> List[FeatureFn]:
     Ordered list of feature functions to apply.
     """
     return [
+        add_legal_header_features,
         add_annotation_marker_features,
     ]
