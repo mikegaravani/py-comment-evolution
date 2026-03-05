@@ -1,0 +1,75 @@
+# python tests/features/check-cross-feature-blocks.py
+
+import pandas as pd
+from pathlib import Path
+import ast
+import numpy as np
+
+file_path = Path("data/processed/comment_blocks_enriched/core/comment_blocks_enriched.parquet")
+
+df = pd.read_parquet(file_path)
+
+cols = ["sb_is_shebang", "lh_has_legal_signal", "am_has_annotation_marker"]
+
+missing = [c for c in cols if c not in df.columns]
+if missing:
+    raise KeyError(f"Missing required columns: {missing}")
+
+flags = df[cols].fillna(False).astype(bool)
+
+n = len(flags)
+if n == 0:
+    raise ValueError("DataFrame has 0 rows; cannot compute percentages.")
+
+def pct(mask: pd.Series) -> float:
+    return 100.0 * mask.mean()
+
+results = {
+    # Singles
+    "sb": pct(flags["sb_is_shebang"]),
+    "lh": pct(flags["lh_has_legal_signal"]),
+    "am": pct(flags["am_has_annotation_marker"]),
+
+    # Pairs
+    "sb & lh": pct(flags["sb_is_shebang"] & flags["lh_has_legal_signal"]),
+    "sb & am": pct(flags["sb_is_shebang"] & flags["am_has_annotation_marker"]),
+    "lh & am": pct(flags["lh_has_legal_signal"] & flags["am_has_annotation_marker"]),
+
+    # Triple
+    "sb & lh & am": pct(
+        flags["sb_is_shebang"]
+        & flags["lh_has_legal_signal"]
+        & flags["am_has_annotation_marker"]
+    ),
+
+    # OR Pairs
+    "sb | lh": pct(flags["sb_is_shebang"] | flags["lh_has_legal_signal"]),
+    "sb | am": pct(flags["sb_is_shebang"] | flags["am_has_annotation_marker"]),
+    "lh | am": pct(flags["lh_has_legal_signal"] | flags["am_has_annotation_marker"]),
+
+    # OR Triple
+    "sb | lh | am": pct(
+        flags["sb_is_shebang"]
+        | flags["lh_has_legal_signal"]
+        | flags["am_has_annotation_marker"]
+    ),
+}
+
+# Pretty print
+order = [
+    "sb",
+    "lh",
+    "am",
+    "sb & lh",
+    "sb & am",
+    "lh & am",
+    "sb & lh & am",
+    "sb | lh",
+    "sb | am",
+    "lh | am",
+    "sb | lh | am",
+]
+
+print(f"Total rows: {n}")
+for k in order:
+    print(f"{k:18s}: {results[k]:6.2f}%")
