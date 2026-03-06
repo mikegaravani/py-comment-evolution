@@ -23,14 +23,16 @@ _NO_ALNUM_RE = re.compile(r"^[^A-Za-z0-9]*$")
 _EMPTY_RE = re.compile(r"^\s*$")
 
 # URL heuristic
-_URL_RE = re.compile(r"(https?://|www\.)\S+", re.IGNORECASE)
+_URL_RE = re.compile(r"(?:https?://|www\.)\S+", re.IGNORECASE)
 
 # EXTRAS:
 # has number (separated from space)
 _HAS_NUMBER_RE = re.compile(r"\b\d+\b")
 # has emoticon (not unicode ones, old school ones)
-_HAS_EMOJI_RE = re.compile(r"[:;=8xX][\-o\*']?[\)\]\(\[dDpP/\\|]+") # EYES + optional NOSE + MOUTH
-# has parentheses
+_HAS_EMOJI_RE = re.compile(
+    r"(?:^|\s)[:;=8xX][\-o\*']?[\)\]\(\[dDpP/\\|]+(?=\s|$|[.,;:!?])" # whitespace before and allowed punctuation after
+)
+# has parentheses (round)
 _HAS_PAREN_RE = re.compile(r"[()]")
 
 # VERB START HEURISTICS
@@ -61,32 +63,89 @@ def add_linguistic_features(
     text_col: str = "block_text_stripped",
 ) -> pd.DataFrame:
     """
-    Adds lightweight linguistic / stylistic features.
-
+    Adds linguistic / stylistic features.
     PREFIX FOR VARIABLES ADDED: lf = linguistic features
 
     Columns added (bool unless noted):
-      - lf_has_punctuation_end
-      - lf_ends_with_period
-      - lf_is_question
-      - lf_is_exclamation
+        - lf_has_punctuation_end
+            - lf_ends_with_period
+            - lf_is_question
+            - lf_is_exclamation
 
-      - lf_is_all_caps
-      - lf_starts_with_lowercase
-      - lf_starts_with_imperative_verb
-      - lf_starts_with_descriptive_verb
+        - lf_is_all_caps
+        - lf_starts_with_lowercase
+        - lf_starts_with_imperative_verb
+        - lf_starts_with_descriptive_verb
 
-      - lf_no_alnum_content        (no alphanumeric characters)
-      - lf_is_empty                (empty or whitespace-only)
-      - lf_is_separator            (no content but not empty)
-      - lf_has_url
+        - lf_has_no_alphanumeric        (no alphanumeric characters)
+        - lf_is_empty                (empty or whitespace-only)
+        - lf_is_separator            (no alnum but not empty)
+        - lf_has_url
 
-      Extra (helpful, optional):
-      - lf_has_number
-      - lf_has_emoticon
-      - lf_has_parentheses
+        - lf_has_number
+        - lf_has_emoticon
+        - lf_has_parentheses
 
       Summary:
-      - lf_number_of_features_true (int)   [counts only the feature booleans above, not including the summary itself]
-      - lf_kinds (list[str])              [names of features that are true]
+        - lf_has_linguistic_feature (bool)  [true if any of the above features are true]
+        - lf_number_of_features_true (int)
+        - lf_kinds (list[str])
     """
+    if text_col not in df_blocks.columns:
+        raise ValueError(f"Missing expected text column: {text_col}")
+
+    # normalize minimally; keep your canonical stripped text
+    s_raw = df_blocks[text_col].fillna("").astype(str)
+    s = s_raw.str.strip()
+
+    features = {
+        # punctuation
+        "has_punctuation_end": s.str.contains(_ENDS_WITH_PUNCT_RE),
+        "ends_with_period": s.str.contains(_ENDS_WITH_PERIOD_RE),
+        "is_question": s.str.contains(_ENDS_WITH_QMARK_RE),
+        "is_exclamation": s.str.contains(_ENDS_WITH_EMARK_RE),
+
+        "is_all_caps": s.str.contains(_ALL_CAPS_RE),
+        "starts_with_lowercase": s.str.contains(_STARTS_WITH_LOWER_RE),
+
+        "starts_with_imperative_verb": s.str.contains(_IMPERATIVE_RE),
+        "starts_with_descriptive_verb": s.str.contains(_DESCRIPTIVE_RE),
+
+        "has_no_alphanumeric": s.str.match(_NO_ALNUM_RE),
+        "is_empty": s.str.match(_EMPTY_RE),
+        "is_separator": s.str.match(_NO_ALNUM_RE) & ~s.str.match(_EMPTY_RE),
+        "has_url": s.str.contains(_URL_RE),
+
+        "has_number": s.str.contains(_HAS_NUMBER_RE),
+        "has_emoticon": s.str.contains(_HAS_EMOJI_RE),
+        "has_parentheses": s.str.contains(_HAS_PAREN_RE),
+    }
+
+    df_matches = pd.DataFrame(features)
+
+    has_any = df_matches.any(axis=1)
+
+    redundant_punct = (
+        df_matches["has_punctuation_end"]
+        & (
+            df_matches["ends_with_period"]
+            | df_matches["is_question"]
+            | df_matches["is_exclamation"]
+        )
+    )
+    number_of_features_true = df_matches.sum(axis=1).astype(int) - redundant_punct.astype(int) # remove redundant punctuation count
+
+    kinds = df_matches.apply(
+        lambda row: [name for name, present in row.items() if present], axis=1
+    )
+
+    out = df_blocks.copy()
+
+    for name in features:
+        out[f"lf_{name}"] = df_matches[name]
+
+    out["lf_has_linguistic_feature"] = has_any
+    out["lf_number_of_features_true"] = number_of_features_true
+    out["lf_kinds"] = kinds
+
+    return out
