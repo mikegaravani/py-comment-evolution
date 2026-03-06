@@ -29,8 +29,10 @@ _URL_RE = re.compile(r"(?:https?://|www\.)\S+", re.IGNORECASE)
 # has number (separated from space)
 _HAS_NUMBER_RE = re.compile(r"\b\d+\b")
 # has emoticon (not unicode ones, old school ones)
-_HAS_EMOJI_RE = re.compile(
-    r"(?:^|\s)[:;=8xX][\-o\*']?[\)\]\(\[dDpP/\\|]+(?=\s|$|[.,;:!?])" # whitespace before and allowed punctuation after
+_EMOTICON_CAPTURE_RE = re.compile(
+    r"(?:^|\s)"                          # whitespace or start before
+    r"([:;=8X][\-o\*']?[\)\]\(\[dDpP/\\|]+)"  # emoticon to capture // removed the x for mouth (false positives)
+    r"(?=\s|$|[.,;:!?])"                 # punctuation, whitespace, or end after
 )
 # has parentheses (round)
 _HAS_PAREN_RE = re.compile(r"[()]")
@@ -41,7 +43,7 @@ _IMPERATIVE_VERBS = [
     "do", "return", "check", "handle", "raise", "prevent", "extract", "ensure", "avoid",
     "use", "set", "get", "compute", "parse", "format", "convert", "create", "build",
     "add", "remove", "update", "write", "read", "load", "save", "fix", "note", "keep",
-    "disable", "enable", "skip", "ignore", "allow", "deny", "validate", "guard",
+    "disable", "enable", "skip", "ignore", "allow", "deny", "validate", "guard", "run",
 ]
 _IMPERATIVE_RE = re.compile(r"^\s*['\"(\[]*\s*(?:" + "|".join(map(re.escape, _IMPERATIVE_VERBS)) + r")\b", re.IGNORECASE)
 
@@ -51,7 +53,7 @@ _DESCRIPTIVE_VERBS = [
     "avoids", "uses", "sets", "gets", "computes", "parses", "formats", "converts",
     "creates", "builds", "adds", "removes", "updates", "writes", "reads", "loads",
     "saves", "fixes", "keeps", "disables", "enables", "skips", "ignores", "allows",
-    "validates", "guards",
+    "validates", "guards", "runs",
     # extra opener words (not verbs)
     "this", "these", "it", "they",
 ]
@@ -86,6 +88,9 @@ def add_linguistic_features(
         - lf_has_emoticon
         - lf_has_parentheses
 
+      Extra list columns:
+        - lf_emoticons_found (list[str])
+
       Summary:
         - lf_has_linguistic_feature (bool)  [true if any of the above features are true]
         - lf_number_of_features_true (int)
@@ -97,6 +102,8 @@ def add_linguistic_features(
     # normalize minimally; keep your canonical stripped text
     s_raw = df_blocks[text_col].fillna("").astype(str)
     s = s_raw.str.strip()
+
+    emoticons_found = s.str.findall(_EMOTICON_CAPTURE_RE)
 
     features = {
         # punctuation
@@ -117,7 +124,7 @@ def add_linguistic_features(
         "has_url": s.str.contains(_URL_RE),
 
         "has_number": s.str.contains(_HAS_NUMBER_RE),
-        "has_emoticon": s.str.contains(_HAS_EMOJI_RE),
+        "has_emoticon": emoticons_found.str.len().gt(0),
         "has_parentheses": s.str.contains(_HAS_PAREN_RE),
     }
 
@@ -143,6 +150,8 @@ def add_linguistic_features(
 
     for name in features:
         out[f"lf_{name}"] = df_matches[name]
+
+    out["lf_emoticons_found"] = emoticons_found
 
     out["lf_has_linguistic_feature"] = has_any
     out["lf_number_of_features_true"] = number_of_features_true
