@@ -24,34 +24,61 @@ def pct(mask: pd.Series):
     pct = 100.0 * count / n
     return pct, count
 
+feature_count = (
+    flags["sb_is_shebang"].astype(int) +
+    flags["lh_has_legal_signal"].astype(int) +
+    flags["am_has_annotation_marker"].astype(int) +
+    flags["td_has_tooling_directive"].astype(int) +
+    flags["lf_has_linguistic_feature"].astype(int)
+)
+
+at_least_3_mask = feature_count >= 3
+
 results = {
     # Singles
     "sb": pct(flags["sb_is_shebang"]),
     "lh": pct(flags["lh_has_legal_signal"]),
     "am": pct(flags["am_has_annotation_marker"]),
+    "td": pct(flags["td_has_tooling_directive"]),
+    "lf": pct(flags["lf_has_linguistic_feature"]),
 
-    # Pairs
-    "sb & lh": pct(flags["sb_is_shebang"] & flags["lh_has_legal_signal"]),
-    "sb & am": pct(flags["sb_is_shebang"] & flags["am_has_annotation_marker"]),
-    "lh & am": pct(flags["lh_has_legal_signal"] & flags["am_has_annotation_marker"]),
-
-    # Triple
-    "sb & lh & am": pct(
-        flags["sb_is_shebang"]
-        & flags["lh_has_legal_signal"]
-        & flags["am_has_annotation_marker"]
+    # AT LEAST ONE
+    "sb | lh | am | td | lf": pct(
+        flags["sb_is_shebang"] |
+        flags["lh_has_legal_signal"] |
+        flags["am_has_annotation_marker"] |
+        flags["td_has_tooling_directive"] |
+        flags["lf_has_linguistic_feature"]
     ),
 
-    # OR Pairs
-    "sb | lh": pct(flags["sb_is_shebang"] | flags["lh_has_legal_signal"]),
-    "sb | am": pct(flags["sb_is_shebang"] | flags["am_has_annotation_marker"]),
-    "lh | am": pct(flags["lh_has_legal_signal"] | flags["am_has_annotation_marker"]),
+    # AT LEAST TWO
+    "at least 2": pct(
+        (flags["sb_is_shebang"].astype(int) +
+         flags["lh_has_legal_signal"].astype(int) +
+         flags["am_has_annotation_marker"].astype(int) +
+         flags["td_has_tooling_directive"].astype(int) +
+         flags["lf_has_linguistic_feature"].astype(int)) >= 2
+    ),
 
-    # OR Triple
-    "sb | lh | am": pct(
-        flags["sb_is_shebang"]
-        | flags["lh_has_legal_signal"]
-        | flags["am_has_annotation_marker"]
+    # AT LEAST THREE
+    "at least 3": pct(at_least_3_mask),
+
+    # AT LEAST FOUR
+    "at least 4": pct(
+        (flags["sb_is_shebang"].astype(int) +
+         flags["lh_has_legal_signal"].astype(int) +
+         flags["am_has_annotation_marker"].astype(int) +
+         flags["td_has_tooling_directive"].astype(int) +
+         flags["lf_has_linguistic_feature"].astype(int)) >= 4
+    ),
+
+    # ALL 5
+    "sb & lh & am & td & lf": pct(
+        flags["sb_is_shebang"] &
+        flags["lh_has_legal_signal"] &
+        flags["am_has_annotation_marker"] &
+        flags["td_has_tooling_directive"] &
+        flags["lf_has_linguistic_feature"]
     ),
 }
 
@@ -60,25 +87,29 @@ order = [
     "sb",
     "lh",
     "am",
-    "sb & lh",
-    "sb & am",
-    "lh & am",
-    "sb & lh & am",
-    "sb | lh",
-    "sb | am",
-    "lh | am",
-    "sb | lh | am",
+    "td",
+    "lf",
+    "sb | lh | am | td | lf",
+    "at least 2",
+    "at least 3",
+    "at least 4",
+    "sb & lh & am & td & lf",
 ]
 
 print(f"Total blocks: {n}")
 
 for k in order:
     pct, count = results[k]
-    print(f"{k:18s}: {pct:6.2f}%  ({count:,} blocks)")
+    print(f"{k:30s}: {pct:6.2f}%  ({count:,} blocks)")
 
-print("\nblock_ids where lh & am is True:")
+print("\n--- Blocks with at least 3 features ---\n")
 
-block_ids = df.loc[flags["lh_has_legal_signal"] & flags["am_has_annotation_marker"], "block_id"]
+rows = df.loc[at_least_3_mask, "block_text_stripped"]
 
-for bid in block_ids:
-    print(f"- {bid}")
+for i, (idx, text) in enumerate(rows.items(), 1):
+    row_flags = flags.loc[idx]
+
+    active = [col for col, val in row_flags.items() if val]
+
+    print(f"\n[{i}]", "features:", ", ".join(active), "\n")
+    print(text)
