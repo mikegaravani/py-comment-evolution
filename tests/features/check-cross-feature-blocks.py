@@ -2,8 +2,6 @@
 
 import pandas as pd
 from pathlib import Path
-import ast
-import numpy as np
 
 file_path = Path("data/processed/comment_blocks_enriched/core/comment_blocks_enriched.parquet")
 
