@@ -1,0 +1,370 @@
+====================================================================================================
+METRIC: inline_blocks
+====================================================================================================
+
+% of blocks with this property per repo:
+
+  Group: new_2020s
+    pytask                  value=    189.00   blocks=   383   pct_blocks=   49.35%
+    pdm                     value=    223.00   blocks=   499   pct_blocks=   44.69%
+    rich                    value=    157.00   blocks=   367   pct_blocks=   42.78%
+    build                   value=     16.00   blocks=    54   pct_blocks=   29.63%
+    pip-audit               value=     38.00   blocks=   152   pct_blocks=   25.00%
+    textualize              value=    322.00   blocks=  1440   pct_blocks=   22.36%
+    poetry-plugin-export    value=      6.00   blocks=    28   pct_blocks=   21.43%
+    typer                   value=     43.00   blocks=   381   pct_blocks=   11.29%
+
+  Group: old_2000s
+    setuptools              value=    179.00   blocks=   447   pct_blocks=   40.04%
+    pygments                value=    228.00   blocks=   963   pct_blocks=   23.68%
+    virtualenv              value=     16.00   blocks=   115   pct_blocks=   13.91%
+    nose                    value=     51.00   blocks=   484   pct_blocks=   10.54%
+    coverage                value=     12.00   blocks=   116   pct_blocks=   10.34%
+    ipython                 value=    354.00   blocks=  3656   pct_blocks=    9.68%
+    pip                     value=     23.00   blocks=   245   pct_blocks=    9.39%
+    scons                   value=    195.00   blocks=  2610   pct_blocks=    7.47%
+
+Group average % for this metric (repo-weighted):
+  new_2020s        avg_pct_blocks=   30.82%
+  old_2000s        avg_pct_blocks=   15.63%
+
+Group average % for this metric (block-weighted):
+  new_2020s        weighted_pct_blocks=   30.08%
+  old_2000s        weighted_pct_blocks=   12.25%
+
+Overall % for this metric across all repos:
+  ALL_REPOS        overall_pct_blocks=   17.19%
+
+====================================================================================================
+METRIC: full_line_blocks
+====================================================================================================
+
+% of blocks with this property per repo:
+
+  Group: new_2020s
+    typer                   value=    338.00   blocks=   381   pct_blocks=   88.71%
+    poetry-plugin-export    value=     22.00   blocks=    28   pct_blocks=   78.57%
+    textualize              value=   1118.00   blocks=  1440   pct_blocks=   77.64%
+    pip-audit               value=    114.00   blocks=   152   pct_blocks=   75.00%
+    build                   value=     38.00   blocks=    54   pct_blocks=   70.37%
+    rich                    value=    210.00   blocks=   367   pct_blocks=   57.22%
+    pdm                     value=    276.00   blocks=   499   pct_blocks=   55.31%
+    pytask                  value=    194.00   blocks=   383   pct_blocks=   50.65%
+
+  Group: old_2000s
+    scons                   value=   2415.00   blocks=  2610   pct_blocks=   92.53%
+    pip                     value=    222.00   blocks=   245   pct_blocks=   90.61%
+    ipython                 value=   3302.00   blocks=  3656   pct_blocks=   90.32%
+    coverage                value=    104.00   blocks=   116   pct_blocks=   89.66%
+    nose                    value=    433.00   blocks=   484   pct_blocks=   89.46%
+    virtualenv              value=     99.00   blocks=   115   pct_blocks=   86.09%
+    pygments                value=    735.00   blocks=   963   pct_blocks=   76.32%
+    setuptools              value=    268.00   blocks=   447   pct_blocks=   59.96%
+
+Group average % for this metric (repo-weighted):
+  old_2000s        avg_pct_blocks=   84.37%
+  new_2020s        avg_pct_blocks=   69.18%
+
+Group average % for this metric (block-weighted):
+  old_2000s        weighted_pct_blocks=   87.75%
+  new_2020s        weighted_pct_blocks=   69.92%
+
+Overall % for this metric across all repos:
+  ALL_REPOS        overall_pct_blocks=   82.81%
+
+====================================================================================================
+METRIC: legal_blocks
+====================================================================================================
+
+% of blocks with this property per repo:
+
+  Group: new_2020s
+    build                   value=      3.00   blocks=    54   pct_blocks=    5.56%
+    pdm                     value=      4.00   blocks=   499   pct_blocks=    0.80%
+    textualize              value=      1.00   blocks=  1440   pct_blocks=    0.07%
+    pip-audit               value=      0.00   blocks=   152   pct_blocks=    0.00%
+    poetry-plugin-export    value=      0.00   blocks=    28   pct_blocks=    0.00%
+    pytask                  value=      0.00   blocks=   383   pct_blocks=    0.00%
+    rich                    value=      0.00   blocks=   367   pct_blocks=    0.00%
+    typer                   value=      0.00   blocks=   381   pct_blocks=    0.00%
+
+  Group: old_2000s
+    scons                   value=    244.00   blocks=  2610   pct_blocks=    9.35%
+    ipython                 value=    118.00   blocks=  3656   pct_blocks=    3.23%
+    coverage                value=      1.00   blocks=   116   pct_blocks=    0.86%
+    pygments                value=      2.00   blocks=   963   pct_blocks=    0.21%
+    nose                    value=      1.00   blocks=   484   pct_blocks=    0.21%
+    pip                     value=      0.00   blocks=   245   pct_blocks=    0.00%
+    setuptools              value=      0.00   blocks=   447   pct_blocks=    0.00%
+    virtualenv              value=      0.00   blocks=   115   pct_blocks=    0.00%
+
+Group average % for this metric (repo-weighted):
+  old_2000s        avg_pct_blocks=    1.73%
+  new_2020s        avg_pct_blocks=    0.80%
+
+Group average % for this metric (block-weighted):
+  old_2000s        weighted_pct_blocks=    4.24%
+  new_2020s        weighted_pct_blocks=    0.24%
+
+Overall % for this metric across all repos:
+  ALL_REPOS        overall_pct_blocks=    3.13%
+
+====================================================================================================
+METRIC: annotation_blocks
+====================================================================================================
+
+% of blocks with this property per repo:
+
+  Group: new_2020s
+    pip-audit               value=     16.00   blocks=   152   pct_blocks=   10.53%
+    typer                   value=     25.00   blocks=   381   pct_blocks=    6.56%
+    poetry-plugin-export    value=      1.00   blocks=    28   pct_blocks=    3.57%
+    textualize              value=     31.00   blocks=  1440   pct_blocks=    2.15%
+    pdm                     value=     10.00   blocks=   499   pct_blocks=    2.00%
+    rich                    value=      2.00   blocks=   367   pct_blocks=    0.54%
+    pytask                  value=      2.00   blocks=   383   pct_blocks=    0.52%
+    build                   value=      0.00   blocks=    54   pct_blocks=    0.00%
+
+  Group: old_2000s
+    pip                     value=     59.00   blocks=   245   pct_blocks=   24.08%
+    virtualenv              value=     11.00   blocks=   115   pct_blocks=    9.57%
+    nose                    value=     34.00   blocks=   484   pct_blocks=    7.02%
+    setuptools              value=     30.00   blocks=   447   pct_blocks=    6.71%
+    scons                   value=    102.00   blocks=  2610   pct_blocks=    3.91%
+    ipython                 value=    123.00   blocks=  3656   pct_blocks=    3.36%
+    pygments                value=     25.00   blocks=   963   pct_blocks=    2.60%
+    coverage                value=      0.00   blocks=   116   pct_blocks=    0.00%
+
+Group average % for this metric (repo-weighted):
+  old_2000s        avg_pct_blocks=    7.16%
+  new_2020s        avg_pct_blocks=    3.24%
+
+Group average % for this metric (block-weighted):
+  old_2000s        weighted_pct_blocks=    4.45%
+  new_2020s        weighted_pct_blocks=    2.63%
+
+Overall % for this metric across all repos:
+  ALL_REPOS        overall_pct_blocks=    3.94%
+
+====================================================================================================
+METRIC: tooling_blocks
+====================================================================================================
+
+% of blocks with this property per repo:
+
+  Group: new_2020s
+    pytask                  value=    174.00   blocks=   383   pct_blocks=   45.43%
+    pdm                     value=    156.00   blocks=   499   pct_blocks=   31.26%
+    rich                    value=     98.00   blocks=   367   pct_blocks=   26.70%
+    pip-audit               value=     37.00   blocks=   152   pct_blocks=   24.34%
+    build                   value=     13.00   blocks=    54   pct_blocks=   24.07%
+    poetry-plugin-export    value=      6.00   blocks=    28   pct_blocks=   21.43%
+    typer                   value=     43.00   blocks=   381   pct_blocks=   11.29%
+    textualize              value=    121.00   blocks=  1440   pct_blocks=    8.40%
+
+  Group: old_2000s
+    pygments                value=     68.00   blocks=   963   pct_blocks=    7.06%
+    coverage                value=      5.00   blocks=   116   pct_blocks=    4.31%
+    ipython                 value=     59.00   blocks=  3656   pct_blocks=    1.61%
+    scons                   value=      1.00   blocks=  2610   pct_blocks=    0.04%
+    nose                    value=      0.00   blocks=   484   pct_blocks=    0.00%
+    pip                     value=      0.00   blocks=   245   pct_blocks=    0.00%
+    setuptools              value=      0.00   blocks=   447   pct_blocks=    0.00%
+    virtualenv              value=      0.00   blocks=   115   pct_blocks=    0.00%
+
+Group average % for this metric (repo-weighted):
+  new_2020s        avg_pct_blocks=   24.12%
+  old_2000s        avg_pct_blocks=    1.63%
+
+Group average % for this metric (block-weighted):
+  new_2020s        weighted_pct_blocks=   19.61%
+  old_2000s        weighted_pct_blocks=    1.54%
+
+Overall % for this metric across all repos:
+  ALL_REPOS        overall_pct_blocks=    6.54%
+
+====================================================================================================
+METRIC: punctuation_end_blocks
+====================================================================================================
+
+% of blocks with this property per repo:
+
+  Group: new_2020s
+    pip-audit               value=     74.00   blocks=   152   pct_blocks=   48.68%
+    poetry-plugin-export    value=     11.00   blocks=    28   pct_blocks=   39.29%
+    pytask                  value=    150.00   blocks=   383   pct_blocks=   39.16%
+    build                   value=     19.00   blocks=    54   pct_blocks=   35.19%
+    textualize              value=    496.00   blocks=  1440   pct_blocks=   34.44%
+    pdm                     value=     95.00   blocks=   499   pct_blocks=   19.04%
+    rich                    value=     24.00   blocks=   367   pct_blocks=    6.54%
+    typer                   value=     15.00   blocks=   381   pct_blocks=    3.94%
+
+  Group: old_2000s
+    coverage                value=     88.00   blocks=   116   pct_blocks=   75.86%
+    scons                   value=   1461.00   blocks=  2610   pct_blocks=   55.98%
+    nose                    value=    156.00   blocks=   484   pct_blocks=   32.23%
+    ipython                 value=    737.00   blocks=  3656   pct_blocks=   20.16%
+    pip                     value=     45.00   blocks=   245   pct_blocks=   18.37%
+    virtualenv              value=     18.00   blocks=   115   pct_blocks=   15.65%
+    setuptools              value=     43.00   blocks=   447   pct_blocks=    9.62%
+    pygments                value=     71.00   blocks=   963   pct_blocks=    7.37%
+
+Group average % for this metric (repo-weighted):
+  old_2000s        avg_pct_blocks=   29.41%
+  new_2020s        avg_pct_blocks=   28.28%
+
+Group average % for this metric (block-weighted):
+  old_2000s        weighted_pct_blocks=   30.33%
+  new_2020s        weighted_pct_blocks=   26.76%
+
+Overall % for this metric across all repos:
+  ALL_REPOS        overall_pct_blocks=   29.34%
+
+====================================================================================================
+METRIC: question_blocks
+====================================================================================================
+
+% of blocks with this property per repo:
+
+  Group: new_2020s
+    pip-audit               value=      1.00   blocks=   152   pct_blocks=    0.66%
+    textualize              value=      7.00   blocks=  1440   pct_blocks=    0.49%
+    typer                   value=      1.00   blocks=   381   pct_blocks=    0.26%
+    build                   value=      0.00   blocks=    54   pct_blocks=    0.00%
+    pdm                     value=      0.00   blocks=   499   pct_blocks=    0.00%
+    poetry-plugin-export    value=      0.00   blocks=    28   pct_blocks=    0.00%
+    pytask                  value=      0.00   blocks=   383   pct_blocks=    0.00%
+    rich                    value=      0.00   blocks=   367   pct_blocks=    0.00%
+
+  Group: old_2000s
+    pip                     value=     19.00   blocks=   245   pct_blocks=    7.76%
+    virtualenv              value=      3.00   blocks=   115   pct_blocks=    2.61%
+    nose                    value=     11.00   blocks=   484   pct_blocks=    2.27%
+    setuptools              value=      7.00   blocks=   447   pct_blocks=    1.57%
+    scons                   value=     28.00   blocks=  2610   pct_blocks=    1.07%
+    pygments                value=     10.00   blocks=   963   pct_blocks=    1.04%
+    ipython                 value=     37.00   blocks=  3656   pct_blocks=    1.01%
+    coverage                value=      0.00   blocks=   116   pct_blocks=    0.00%
+
+Group average % for this metric (repo-weighted):
+  old_2000s        avg_pct_blocks=    2.17%
+  new_2020s        avg_pct_blocks=    0.18%
+
+Group average % for this metric (block-weighted):
+  old_2000s        weighted_pct_blocks=    1.33%
+  new_2020s        weighted_pct_blocks=    0.27%
+
+Overall % for this metric across all repos:
+  ALL_REPOS        overall_pct_blocks=    1.04%
+
+====================================================================================================
+METRIC: exclamation_blocks
+====================================================================================================
+
+% of blocks with this property per repo:
+
+  Group: new_2020s
+    poetry-plugin-export    value=      1.00   blocks=    28   pct_blocks=    3.57%
+    pytask                  value=      1.00   blocks=   383   pct_blocks=    0.26%
+    textualize              value=      3.00   blocks=  1440   pct_blocks=    0.21%
+    build                   value=      0.00   blocks=    54   pct_blocks=    0.00%
+    pdm                     value=      0.00   blocks=   499   pct_blocks=    0.00%
+    pip-audit               value=      0.00   blocks=   152   pct_blocks=    0.00%
+    rich                    value=      0.00   blocks=   367   pct_blocks=    0.00%
+    typer                   value=      0.00   blocks=   381   pct_blocks=    0.00%
+
+  Group: old_2000s
+    setuptools              value=      9.00   blocks=   447   pct_blocks=    2.01%
+    virtualenv              value=      1.00   blocks=   115   pct_blocks=    0.87%
+    coverage                value=      1.00   blocks=   116   pct_blocks=    0.86%
+    pygments                value=      8.00   blocks=   963   pct_blocks=    0.83%
+    pip                     value=      2.00   blocks=   245   pct_blocks=    0.82%
+    ipython                 value=     28.00   blocks=  3656   pct_blocks=    0.77%
+    scons                   value=      9.00   blocks=  2610   pct_blocks=    0.34%
+    nose                    value=      0.00   blocks=   484   pct_blocks=    0.00%
+
+Group average % for this metric (repo-weighted):
+  old_2000s        avg_pct_blocks=    0.81%
+  new_2020s        avg_pct_blocks=    0.51%
+
+Group average % for this metric (block-weighted):
+  old_2000s        weighted_pct_blocks=    0.67%
+  new_2020s        weighted_pct_blocks=    0.15%
+
+Overall % for this metric across all repos:
+  ALL_REPOS        overall_pct_blocks=    0.53%
+
+====================================================================================================
+METRIC: url_blocks
+====================================================================================================
+
+% of blocks with this property per repo:
+
+  Group: new_2020s
+    build                   value=      3.00   blocks=    54   pct_blocks=    5.56%
+    pip-audit               value=      5.00   blocks=   152   pct_blocks=    3.29%
+    pdm                     value=     13.00   blocks=   499   pct_blocks=    2.61%
+    typer                   value=      7.00   blocks=   381   pct_blocks=    1.84%
+    rich                    value=      6.00   blocks=   367   pct_blocks=    1.63%
+    textualize              value=     22.00   blocks=  1440   pct_blocks=    1.53%
+    pytask                  value=      5.00   blocks=   383   pct_blocks=    1.31%
+    poetry-plugin-export    value=      0.00   blocks=    28   pct_blocks=    0.00%
+
+  Group: old_2000s
+    virtualenv              value=      3.00   blocks=   115   pct_blocks=    2.61%
+    pip                     value=      3.00   blocks=   245   pct_blocks=    1.22%
+    coverage                value=      1.00   blocks=   116   pct_blocks=    0.86%
+    ipython                 value=     24.00   blocks=  3656   pct_blocks=    0.66%
+    nose                    value=      3.00   blocks=   484   pct_blocks=    0.62%
+    scons                   value=     15.00   blocks=  2610   pct_blocks=    0.57%
+    pygments                value=      2.00   blocks=   963   pct_blocks=    0.21%
+    setuptools              value=      0.00   blocks=   447   pct_blocks=    0.00%
+
+Group average % for this metric (repo-weighted):
+  new_2020s        avg_pct_blocks=    2.22%
+  old_2000s        avg_pct_blocks=    0.84%
+
+Group average % for this metric (block-weighted):
+  new_2020s        weighted_pct_blocks=    1.85%
+  old_2000s        weighted_pct_blocks=    0.59%
+
+Overall % for this metric across all repos:
+  ALL_REPOS        overall_pct_blocks=    0.94%
+
+====================================================================================================
+METRIC: separator_blocks
+====================================================================================================
+
+% of blocks with this property per repo:
+
+  Group: new_2020s
+    rich                    value=      1.00   blocks=   367   pct_blocks=    0.27%
+    build                   value=      0.00   blocks=    54   pct_blocks=    0.00%
+    pdm                     value=      0.00   blocks=   499   pct_blocks=    0.00%
+    pip-audit               value=      0.00   blocks=   152   pct_blocks=    0.00%
+    poetry-plugin-export    value=      0.00   blocks=    28   pct_blocks=    0.00%
+    pytask                  value=      0.00   blocks=   383   pct_blocks=    0.00%
+    textualize              value=      0.00   blocks=  1440   pct_blocks=    0.00%
+    typer                   value=      0.00   blocks=   381   pct_blocks=    0.00%
+
+  Group: old_2000s
+    ipython                 value=     82.00   blocks=  3656   pct_blocks=    2.24%
+    setuptools              value=      1.00   blocks=   447   pct_blocks=    0.22%
+    pygments                value=      2.00   blocks=   963   pct_blocks=    0.21%
+    scons                   value=      2.00   blocks=  2610   pct_blocks=    0.08%
+    coverage                value=      0.00   blocks=   116   pct_blocks=    0.00%
+    nose                    value=      0.00   blocks=   484   pct_blocks=    0.00%
+    pip                     value=      0.00   blocks=   245   pct_blocks=    0.00%
+    virtualenv              value=      0.00   blocks=   115   pct_blocks=    0.00%
+
+Group average % for this metric (repo-weighted):
+  old_2000s        avg_pct_blocks=    0.34%
+  new_2020s        avg_pct_blocks=    0.03%
+
+Group average % for this metric (block-weighted):
+  old_2000s        weighted_pct_blocks=    1.01%
+  new_2020s        weighted_pct_blocks=    0.03%
+
+Overall % for this metric across all repos:
+  ALL_REPOS        overall_pct_blocks=    0.74%
+

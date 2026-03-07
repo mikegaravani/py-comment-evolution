@@ -1,0 +1,29 @@
+from __future__ import annotations
+
+from pathlib import Path
+import pandas as pd
+
+
+SUBSETS = ["core", "core_plus_tests", "tests_only", "all_py"]
+
+
+def input_blocks_parquet_path(subset: str) -> Path:
+    return Path("data/processed/comment_blocks_enriched") / subset / "comment_blocks_enriched.parquet"
+
+
+def output_results_repo_level(subset: str) -> Path:
+    return Path("results") / subset / "summary_stats" / "repo_level.csv"
+
+
+def read_blocks(subset: str) -> pd.DataFrame:
+    in_path = input_blocks_parquet_path(subset)
+    if not in_path.exists():
+        raise FileNotFoundError(f"Missing input parquet: {in_path}")
+    df = pd.read_parquet(in_path)
+    return df
+
+def write_results_repo_level(df_blocks: pd.DataFrame, subset: str) -> Path:
+    out_path = output_results_repo_level(subset)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    df_blocks.to_csv(out_path, index=False)
+    return out_path
