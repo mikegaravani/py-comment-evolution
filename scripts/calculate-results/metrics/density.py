@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-
+# map for subset flags in file_index.parquet
 SUBSET_FLAG_MAP = {
     "core": "subset_core",
     "core_plus_tests": "subset_core_plus_tests",
@@ -10,6 +10,12 @@ SUBSET_FLAG_MAP = {
     "all_py": "subset_all_py",
 }
 
+# kinds of blocks
+BLOCK_KINDS = [
+    "inline",
+    "full_line_singleton",
+    "full_line_block",
+]
 
 FILE_GROUP_COLS = [
     "repo",
@@ -57,14 +63,78 @@ def _filter_file_index_for_subset(file_index_df: pd.DataFrame, subset: str) -> p
 
 
 def _aggregate_block_counts_by_file(blocks_df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Returns one row per file_id with:
+    - total block_count
+    - block-kind counts
+    """
     if blocks_df.empty:
-        return pd.DataFrame(columns=["file_id", "block_count"])
+        return pd.DataFrame(
+            columns=[
+                "file_id",
+                "block_count",
+                "inline_block_count",
+                "full_line_singleton_block_count",
+                "full_line_block_block_count",
+            ]
+        )
 
-    out = (
+    total_counts = (
         blocks_df.groupby("file_id", as_index=False)
         .agg(block_count=("block_id", "count"))
     )
+
+    kind_counts = (
+        blocks_df.groupby(["file_id", "block_kind"])
+        .size()
+        .unstack(fill_value=0)
+        .reset_index()
+    )
+
+    # ensure all expected block kinds exist as columns
+    for kind in BLOCK_KINDS:
+        if kind not in kind_counts.columns:
+            kind_counts[kind] = 0
+
+    kind_counts = kind_counts.rename(
+        columns={
+            "inline": "inline_block_count",
+            "full_line_singleton": "full_line_singleton_block_count",
+            "full_line_block": "full_line_block_block_count",
+        }
+    )
+
+    out = total_counts.merge(kind_counts, on="file_id", how="left", validate="one_to_one")
+
+    count_cols = [
+        "block_count",
+        "inline_block_count",
+        "full_line_singleton_block_count",
+        "full_line_block_block_count",
+    ]
+    for col in count_cols:
+        out[col] = out[col].fillna(0).astype(int)
+
     return out
+
+
+def _add_block_kind_ratios(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+
+    ratio_specs = [
+        ("inline_block_count", "inline_block_ratio"),
+        ("full_line_singleton_block_count", "full_line_singleton_block_ratio"),
+        ("full_line_block_block_count", "full_line_block_block_ratio"),
+    ]
+
+    for count_col, ratio_col in ratio_specs:
+        df[ratio_col] = 0.0
+        nonzero_mask = df["block_count"] > 0
+        df.loc[nonzero_mask, ratio_col] = (
+            df.loc[nonzero_mask, count_col] / df.loc[nonzero_mask, "block_count"]
+        )
+
+    return df
 
 
 def compute_density_metrics(
@@ -88,7 +158,7 @@ def compute_density_metrics(
     files_df = _filter_file_index_for_subset(file_index_df, subset)
     block_counts_df = _aggregate_block_counts_by_file(blocks_df)
 
-    # Warnable mismatch info can be inspected by caller if needed
+    # check for orphan file_ids
     block_file_ids = set(block_counts_df["file_id"].unique()) if not block_counts_df.empty else set()
     file_index_file_ids = set(files_df["file_id"].unique())
     orphan_block_file_ids = block_file_ids - file_index_file_ids
@@ -100,6 +170,15 @@ def compute_density_metrics(
         validate="one_to_one",
     )
 
+    count_cols = [
+        "block_count",
+        "inline_block_count",
+        "full_line_singleton_block_count",
+        "full_line_block_block_count",
+    ]
+    for col in count_cols:
+        file_level_df[col] = file_level_df[col].fillna(0).astype(int)
+
     file_level_df["block_count"] = file_level_df["block_count"].fillna(0).astype(int)
     file_level_df["blocks_per_file"] = file_level_df["block_count"].astype(float)
     file_level_df["blocks_per_kloc"] = (
@@ -107,6 +186,8 @@ def compute_density_metrics(
     )
 
     file_level_df["subset"] = subset
+
+    file_level_df = _add_block_kind_ratios(file_level_df)
 
     file_level_out = file_level_df[
         [
@@ -120,6 +201,12 @@ def compute_density_metrics(
             "block_count",
             "blocks_per_file",
             "blocks_per_kloc",
+            "inline_block_count",
+            "full_line_singleton_block_count",
+            "full_line_block_block_count",
+            "inline_block_ratio",
+            "full_line_singleton_block_ratio",
+            "full_line_block_block_ratio",
         ]
     ].copy()
 
@@ -129,6 +216,9 @@ def compute_density_metrics(
             file_count=("file_id", "count"),
             loc_total=("loc_total", "sum"),
             block_count=("block_count", "sum"),
+            inline_block_count=("inline_block_count", "sum"),
+            full_line_singleton_block_count=("full_line_singleton_block_count", "sum"),
+            full_line_block_block_count=("full_line_block_block_count", "sum"),
         )
     )
 
@@ -137,6 +227,7 @@ def compute_density_metrics(
     repo_level_df["blocks_per_kloc"] = (
         repo_level_df["block_count"] / (repo_level_df["loc_total"] / 1000.0)
     )
+    repo_level_df = _add_block_kind_ratios(repo_level_df)
 
     repo_level_out = repo_level_df[
         [
@@ -149,6 +240,12 @@ def compute_density_metrics(
             "block_count",
             "blocks_per_file",
             "blocks_per_kloc",
+            "inline_block_count",
+            "full_line_singleton_block_count",
+            "full_line_block_block_count",
+            "inline_block_ratio",
+            "full_line_singleton_block_ratio",
+            "full_line_block_block_ratio",
         ]
     ].copy()
 
@@ -159,10 +256,19 @@ def compute_density_metrics(
             file_count=("file_count", "sum"),
             loc_total=("loc_total", "sum"),
             block_count=("block_count", "sum"),
+            inline_block_count=("inline_block_count", "sum"),
+            full_line_singleton_block_count=("full_line_singleton_block_count", "sum"),
+            full_line_block_block_count=("full_line_block_block_count", "sum"),
             mean_repo_blocks_per_file=("blocks_per_file", "mean"),
             median_repo_blocks_per_file=("blocks_per_file", "median"),
             mean_repo_blocks_per_kloc=("blocks_per_kloc", "mean"),
             median_repo_blocks_per_kloc=("blocks_per_kloc", "median"),
+            mean_repo_inline_block_ratio=("inline_block_ratio", "mean"),
+            median_repo_inline_block_ratio=("inline_block_ratio", "median"),
+            mean_repo_full_line_singleton_block_ratio=("full_line_singleton_block_ratio", "mean"),
+            median_repo_full_line_singleton_block_ratio=("full_line_singleton_block_ratio", "median"),
+            mean_repo_full_line_block_block_ratio=("full_line_block_block_ratio", "mean"),
+            median_repo_full_line_block_block_ratio=("full_line_block_block_ratio", "median"),
         )
     )
 
@@ -171,6 +277,7 @@ def compute_density_metrics(
     group_level_df["blocks_per_kloc"] = (
         group_level_df["block_count"] / (group_level_df["loc_total"] / 1000.0)
     )
+    group_level_df = _add_block_kind_ratios(group_level_df)
 
     group_level_out = group_level_df[
         [
@@ -182,10 +289,22 @@ def compute_density_metrics(
             "block_count",
             "blocks_per_file",
             "blocks_per_kloc",
+            "inline_block_count",
+            "full_line_singleton_block_count",
+            "full_line_block_block_count",
+            "inline_block_ratio",
+            "full_line_singleton_block_ratio",
+            "full_line_block_block_ratio",
             "mean_repo_blocks_per_file",
             "median_repo_blocks_per_file",
             "mean_repo_blocks_per_kloc",
             "median_repo_blocks_per_kloc",
+            "mean_repo_inline_block_ratio",
+            "median_repo_inline_block_ratio",
+            "mean_repo_full_line_singleton_block_ratio",
+            "median_repo_full_line_singleton_block_ratio",
+            "mean_repo_full_line_block_block_ratio",
+            "median_repo_full_line_block_block_ratio",
         ]
     ].copy()
 
