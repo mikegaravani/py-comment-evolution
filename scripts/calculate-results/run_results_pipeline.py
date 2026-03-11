@@ -8,22 +8,48 @@ USAGE:
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
-import pandas as pd
 
 from metrics.repo_level import compute_repo_level_metrics
+from metrics.density import compute_density_metrics
 
-from io_utils import SUBSETS, read_blocks, write_results_repo_level
+from io_utils import (
+    SUBSETS,
+    read_blocks,
+    read_file_index,
+    write_results_repo_level,
+    write_density_file_level,
+    write_density_repo_level,
+    write_density_group_level,
+)
 
 
 def run_subset(subset: str) -> None:
 
     print(f"[results] Processing subset: {subset}")
 
-    df = read_blocks(subset)
-    repo_metrics = compute_repo_level_metrics(df)
-    repo_level_metrics_path = write_results_repo_level(repo_metrics, subset)
+    blocks_df = read_blocks(subset)
+    file_index_df = read_file_index()
+
+    # repo metrics
+    repo_metrics_df = compute_repo_level_metrics(blocks_df)
+    repo_level_metrics_path = write_results_repo_level(repo_metrics_df, subset)
     print(f"[results, subset: {subset}] Wrote repo-level metrics → {repo_level_metrics_path}")
+
+
+    # density metrics
+    file_density_df, repo_density_df, group_density_df = compute_density_metrics(
+        file_index_df=file_index_df,
+        blocks_df=blocks_df,
+        subset=subset,
+    )
+
+    file_density_path = write_density_file_level(file_density_df, subset)
+    repo_density_path = write_density_repo_level(repo_density_df, subset)
+    group_density_path = write_density_group_level(group_density_df, subset)
+
+    print(f"[results, subset: {subset}] Wrote file-level density → {file_density_path}")
+    print(f"[results, subset: {subset}] Wrote repo-level density → {repo_density_path}")
+    print(f"[results, subset: {subset}] Wrote group-level density → {group_density_path}")
 
 
 def main():
