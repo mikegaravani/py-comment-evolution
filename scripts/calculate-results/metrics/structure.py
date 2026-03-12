@@ -36,9 +36,32 @@ def compute_structure_metrics(
     - distribution of block_kind
     - block_char_len
     - block_word_len
+
+    NOTE:
+    Blocks containing legal signals (licenses, SPDX, copyright) are excluded
+    from the analysis because they artificially inflate block length metrics.
     """
 
     df = blocks_df.copy()
+
+
+    # --------------------------------------------------
+    # Remove legal blocks from structure analysis
+    # --------------------------------------------------
+
+    if "lh_has_legal_signal" not in df.columns:
+        raise KeyError("Expected column 'lh_has_legal_signal' not found in blocks dataframe")
+
+    initial_blocks = len(df)
+
+    df = df[~df["lh_has_legal_signal"]].copy()
+
+    removed_blocks = initial_blocks - len(df)
+
+    print(
+        f"[structure, subset: {subset}] "
+        f"Removed {removed_blocks} legal blocks from structure analysis"
+    )
 
     unknown_kinds = sorted(set(df["block_kind"].dropna().unique()) - set(VALID_BLOCK_KINDS))
     if unknown_kinds:
