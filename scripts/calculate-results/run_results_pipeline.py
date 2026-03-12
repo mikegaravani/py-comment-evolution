@@ -11,15 +11,21 @@ import argparse
 
 from metrics.repo_level import compute_repo_level_metrics
 from metrics.density import compute_density_metrics
+from metrics.structure import compute_structure_metrics
 
 from io_utils import (
     SUBSETS,
     read_blocks,
     read_file_index,
+
     write_results_repo_level,
+
     write_density_file_level,
     write_density_repo_level,
     write_density_group_level,
+
+    write_structure_repo_level,
+    write_structure_group_level,
 )
 
 
@@ -50,6 +56,18 @@ def run_subset(subset: str) -> None:
     print(f"[results, subset: {subset}] Wrote file-level density → {file_density_path}")
     print(f"[results, subset: {subset}] Wrote repo-level density → {repo_density_path}")
     print(f"[results, subset: {subset}] Wrote group-level density → {group_density_path}")
+
+    # Structure metrics
+    repo_structure_df, group_structure_df = compute_structure_metrics(
+        blocks_df=blocks_df,
+        subset=subset,
+    )
+
+    repo_structure_path = write_structure_repo_level(repo_structure_df, subset)
+    group_structure_path = write_structure_group_level(group_structure_df, subset)
+
+    print(f"[results, subset: {subset}] Wrote repo-level structure → {repo_structure_path}")
+    print(f"[results, subset: {subset}] Wrote group-level structure → {group_structure_path}")
 
 
 def main():
