@@ -13,6 +13,7 @@ from metrics.repo_level import compute_repo_level_metrics
 from metrics.density import compute_density_metrics
 from metrics.structure import compute_structure_metrics
 from metrics.legal import compute_legal_metrics
+from metrics.annotation_markers import compute_annotation_marker_metrics
 
 from io_utils import (
     SUBSETS,
@@ -29,6 +30,9 @@ from io_utils import (
     write_structure_group_level,
 
     write_legal_repo_level,
+
+    write_annotation_markers_repo_level,
+    write_annotation_markers_group_level,
 )
 
 
@@ -80,6 +84,18 @@ def run_subset(subset: str) -> None:
 
     legal_repo_path = write_legal_repo_level(legal_repo_df, subset)
     print(f"[results, subset: {subset}] Wrote repo-level legal → {legal_repo_path}")
+
+    # Annotation marker metrics
+    annotation_repo_df, annotation_group_df = compute_annotation_marker_metrics(
+        blocks_df=blocks_df,
+        subset=subset,
+    )
+
+    annotation_repo_path = write_annotation_markers_repo_level(annotation_repo_df, subset)
+    annotation_group_path = write_annotation_markers_group_level(annotation_group_df, subset)
+
+    print(f"[results, subset: {subset}] Wrote repo-level annotation markers → {annotation_repo_path}")
+    print(f"[results, subset: {subset}] Wrote group-level annotation markers → {annotation_group_path}")
 
 
 def main():
