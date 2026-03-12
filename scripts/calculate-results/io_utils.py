@@ -32,6 +32,9 @@ def output_structure_repo_level(subset: str) -> Path:
 def output_structure_group_level(subset: str) -> Path:
     return Path("results") / subset / "structure" / "group_level_structure.csv"
 
+def output_legal_repo_level(subset: str) -> Path:
+    return Path("results") / subset / "legal" / "repo_level_legal.csv"
+
 
 # --------------- READ FILES ---------------
 def read_blocks(subset: str) -> pd.DataFrame:
@@ -84,6 +87,12 @@ def write_structure_repo_level(df: pd.DataFrame, subset: str) -> Path:
 
 def write_structure_group_level(df: pd.DataFrame, subset: str) -> Path:
     out_path = output_structure_group_level(subset)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(out_path, index=False)
+    return out_path
+
+def write_legal_repo_level(df: pd.DataFrame, subset: str) -> Path:
+    out_path = output_legal_repo_level(subset)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(out_path, index=False)
     return out_path

@@ -12,6 +12,7 @@ import argparse
 from metrics.repo_level import compute_repo_level_metrics
 from metrics.density import compute_density_metrics
 from metrics.structure import compute_structure_metrics
+from metrics.legal import compute_legal_metrics
 
 from io_utils import (
     SUBSETS,
@@ -26,6 +27,8 @@ from io_utils import (
 
     write_structure_repo_level,
     write_structure_group_level,
+
+    write_legal_repo_level,
 )
 
 
@@ -68,6 +71,15 @@ def run_subset(subset: str) -> None:
 
     print(f"[results, subset: {subset}] Wrote repo-level structure → {repo_structure_path}")
     print(f"[results, subset: {subset}] Wrote group-level structure → {group_structure_path}")
+
+    # Legal metrics
+    legal_repo_df = compute_legal_metrics(
+        blocks_df=blocks_df,
+        subset=subset,
+    )
+
+    legal_repo_path = write_legal_repo_level(legal_repo_df, subset)
+    print(f"[results, subset: {subset}] Wrote repo-level legal → {legal_repo_path}")
 
 
 def main():
