@@ -15,6 +15,7 @@ from metrics.structure import compute_structure_metrics
 from metrics.legal import compute_legal_metrics
 from metrics.annotation_markers import compute_annotation_marker_metrics
 from metrics.tooling_directives import compute_tooling_directive_metrics
+from metrics.linguistic_features import compute_linguistic_feature_metrics
 
 from io_utils import (
     SUBSETS,
@@ -37,6 +38,9 @@ from io_utils import (
 
     write_tooling_directives_repo_level,
     write_tooling_directives_group_level,
+
+    write_linguistic_features_repo_level,
+    write_linguistic_features_group_level,
 )
 
 
@@ -112,6 +116,18 @@ def run_subset(subset: str) -> None:
 
     print(f"[results, subset: {subset}] Wrote repo-level tooling directives → {tooling_repo_path}")
     print(f"[results, subset: {subset}] Wrote group-level tooling directives → {tooling_group_path}")
+
+    # Linguistic feature metrics
+    linguistic_repo_df, linguistic_group_df = compute_linguistic_feature_metrics(
+        blocks_df=blocks_df,
+        subset=subset,
+    )
+
+    linguistic_repo_path = write_linguistic_features_repo_level(linguistic_repo_df, subset)
+    linguistic_group_path = write_linguistic_features_group_level(linguistic_group_df, subset)
+
+    print(f"[results, subset: {subset}] Wrote repo-level linguistic features → {linguistic_repo_path}")
+    print(f"[results, subset: {subset}] Wrote group-level linguistic features → {linguistic_group_path}")
 
 
 def main():

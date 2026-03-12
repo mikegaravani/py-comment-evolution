@@ -47,6 +47,12 @@ def output_tooling_directives_repo_level(subset: str) -> Path:
 def output_tooling_directives_group_level(subset: str) -> Path:
     return Path("results") / subset / "tooling_directives" / "group_level_tooling_directives.csv"
 
+def output_linguistic_features_repo_level(subset: str) -> Path:
+    return Path("results") / subset / "linguistic_features" / "repo_level_linguistic_features.csv"
+
+def output_linguistic_features_group_level(subset: str) -> Path:
+    return Path("results") / subset / "linguistic_features" / "group_level_linguistic_features.csv"
+
 
 # --------------- READ FILES ---------------
 def read_blocks(subset: str) -> pd.DataFrame:
@@ -129,6 +135,18 @@ def write_tooling_directives_repo_level(df: pd.DataFrame, subset: str) -> Path:
 
 def write_tooling_directives_group_level(df: pd.DataFrame, subset: str) -> Path:
     out_path = output_tooling_directives_group_level(subset)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(out_path, index=False)
+    return out_path
+
+def write_linguistic_features_repo_level(df: pd.DataFrame, subset: str) -> Path:
+    out_path = output_linguistic_features_repo_level(subset)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(out_path, index=False)
+    return out_path
+
+def write_linguistic_features_group_level(df: pd.DataFrame, subset: str) -> Path:
+    out_path = output_linguistic_features_group_level(subset)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(out_path, index=False)
     return out_path
