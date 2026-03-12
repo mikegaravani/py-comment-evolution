@@ -14,6 +14,7 @@ from metrics.density import compute_density_metrics
 from metrics.structure import compute_structure_metrics
 from metrics.legal import compute_legal_metrics
 from metrics.annotation_markers import compute_annotation_marker_metrics
+from metrics.tooling_directives import compute_tooling_directive_metrics
 
 from io_utils import (
     SUBSETS,
@@ -33,6 +34,9 @@ from io_utils import (
 
     write_annotation_markers_repo_level,
     write_annotation_markers_group_level,
+
+    write_tooling_directives_repo_level,
+    write_tooling_directives_group_level,
 )
 
 
@@ -96,6 +100,18 @@ def run_subset(subset: str) -> None:
 
     print(f"[results, subset: {subset}] Wrote repo-level annotation markers → {annotation_repo_path}")
     print(f"[results, subset: {subset}] Wrote group-level annotation markers → {annotation_group_path}")
+
+    # Tooling directive metrics
+    tooling_repo_df, tooling_group_df = compute_tooling_directive_metrics(
+        blocks_df=blocks_df,
+        subset=subset,
+    )
+
+    tooling_repo_path = write_tooling_directives_repo_level(tooling_repo_df, subset)
+    tooling_group_path = write_tooling_directives_group_level(tooling_group_df, subset)
+
+    print(f"[results, subset: {subset}] Wrote repo-level tooling directives → {tooling_repo_path}")
+    print(f"[results, subset: {subset}] Wrote group-level tooling directives → {tooling_group_path}")
 
 
 def main():
