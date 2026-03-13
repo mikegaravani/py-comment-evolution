@@ -13,6 +13,10 @@ def input_blocks_parquet_path(subset: str) -> Path:
 def input_file_index_parquet_path() -> Path:
     return Path("data/processed/file_index") / "file_index.parquet"
 
+def input_docstrings_parquet_path(subset: str) -> Path:
+    return Path("data/processed/docstring_data") / subset / "docstrings.parquet"
+
+
 
 def output_results_repo_level(subset: str) -> Path:
     return Path("results") / subset / "summary_stats" / "repo_level.csv"
@@ -53,6 +57,12 @@ def output_linguistic_features_repo_level(subset: str) -> Path:
 def output_linguistic_features_group_level(subset: str) -> Path:
     return Path("results") / subset / "linguistic_features" / "group_level_linguistic_features.csv"
 
+def output_docstrings_repo_level(subset: str) -> Path:
+    return Path("results") / subset / "docstrings" / "repo_level_docstrings.csv"
+
+def output_docstrings_group_level(subset: str) -> Path:
+    return Path("results") / subset / "docstrings" / "group_level_docstrings.csv"
+
 
 # --------------- READ FILES ---------------
 def read_blocks(subset: str) -> pd.DataFrame:
@@ -67,6 +77,13 @@ def read_file_index() -> pd.DataFrame:
     if not in_path.exists():
         raise FileNotFoundError(f"Missing file index parquet: {in_path}")
     return pd.read_parquet(in_path)
+
+def read_docstrings(subset: str) -> pd.DataFrame:
+    in_path = input_docstrings_parquet_path(subset)
+    if not in_path.exists():
+        raise FileNotFoundError(f"Missing docstrings parquet: {in_path}")
+    return pd.read_parquet(in_path)
+
 
 
 
@@ -147,6 +164,18 @@ def write_linguistic_features_repo_level(df: pd.DataFrame, subset: str) -> Path:
 
 def write_linguistic_features_group_level(df: pd.DataFrame, subset: str) -> Path:
     out_path = output_linguistic_features_group_level(subset)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(out_path, index=False)
+    return out_path
+
+def write_docstrings_repo_level(df: pd.DataFrame, subset: str) -> Path:
+    out_path = output_docstrings_repo_level(subset)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(out_path, index=False)
+    return out_path
+
+def write_docstrings_group_level(df: pd.DataFrame, subset: str) -> Path:
+    out_path = output_docstrings_group_level(subset)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(out_path, index=False)
     return out_path

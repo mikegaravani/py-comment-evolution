@@ -16,6 +16,7 @@ from metrics.legal import compute_legal_metrics
 from metrics.annotation_markers import compute_annotation_marker_metrics
 from metrics.tooling_directives import compute_tooling_directive_metrics
 from metrics.linguistic_features import compute_linguistic_feature_metrics
+from metrics.docstring_density import compute_docstring_density_metrics
 
 from io_utils import (
     SUBSETS,
@@ -41,6 +42,10 @@ from io_utils import (
 
     write_linguistic_features_repo_level,
     write_linguistic_features_group_level,
+
+    read_docstrings,
+    write_docstrings_repo_level,
+    write_docstrings_group_level,
 )
 
 
@@ -50,6 +55,7 @@ def run_subset(subset: str) -> None:
 
     blocks_df = read_blocks(subset)
     file_index_df = read_file_index()
+    docstrings_df = read_docstrings(subset)
 
     # repo metrics
     repo_metrics_df = compute_repo_level_metrics(blocks_df)
@@ -128,6 +134,19 @@ def run_subset(subset: str) -> None:
 
     print(f"[results, subset: {subset}] Wrote repo-level linguistic features → {linguistic_repo_path}")
     print(f"[results, subset: {subset}] Wrote group-level linguistic features → {linguistic_group_path}")
+
+    # Docstring density metrics
+    repo_docstrings_df, group_docstrings_df = compute_docstring_density_metrics(
+        file_index_df=file_index_df,
+        docstrings_df=docstrings_df,
+        subset=subset,
+    )
+
+    repo_docstrings_path = write_docstrings_repo_level(repo_docstrings_df, subset)
+    group_docstrings_path = write_docstrings_group_level(group_docstrings_df, subset)
+
+    print(f"[results, subset: {subset}] Wrote repo-level docstrings → {repo_docstrings_path}")
+    print(f"[results, subset: {subset}] Wrote group-level docstrings → {group_docstrings_path}")
 
 
 def main():
