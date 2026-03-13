@@ -78,12 +78,12 @@ def _aggregate_docstring_counts_by_file(docstrings_df: pd.DataFrame) -> pd.DataF
     df["scope"] = df["scope"].replace({"async_function": "function"})
 
     total_counts = (
-        docstrings_df.groupby("file_id", as_index=False)
+        df.groupby("file_id", as_index=False)
         .agg(docstring_count=("file_id", "size"))
     )
 
     scope_counts = (
-        docstrings_df.groupby(["file_id", "scope"])
+        df.groupby(["file_id", "scope"])
         .size()
         .unstack(fill_value=0)
         .reset_index()
