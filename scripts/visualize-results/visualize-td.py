@@ -76,6 +76,7 @@ def make_tooling_directive_rate_double_bar(group_df: pd.DataFrame, subset: str) 
         ("mypy_block_ratio", "mypy_blocks", "MYPY"),
         ("fmt_block_ratio", "fmt_blocks", "FMT"),
         ("encoding_block_ratio", "encoding_blocks", "ENCODING"),
+        ("shebang_block_ratio", "shebang_blocks", "SHEBANG"),
         ("tooling_block_ratio", "tooling_blocks", "ANY"),
     ]
 
