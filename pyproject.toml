@@ -1,7 +1,7 @@
 [project]
 name = "py-comment-evolution"
 version = "0.1.0"
-description = "Add your description here"
+description = " An empirical study of the evolution of code commenting practices in Python projects from the early 2000s to the 2020s."
 readme = "README.md"
 requires-python = ">=3.11,<3.12"
 dependencies = [
