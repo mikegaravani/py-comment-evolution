@@ -9,7 +9,7 @@ file_path = Path("data/processed/comment_blocks_enriched/core/comment_blocks_enr
 df = pd.read_parquet(file_path)
 
 # Filter rows
-filtered = df[(df["group"] == "old_2000s") & (df["td_has_pragma"] == True)]
+filtered = df[(df["group"] == "old_2000s") & (df["td_has_pragma"] == True)] # noqa: E712
 
 # Print block ids
 for block_id in filtered["block_id"]:

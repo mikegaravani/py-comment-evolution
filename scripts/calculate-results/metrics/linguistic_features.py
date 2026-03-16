@@ -26,10 +26,10 @@ def _filter_linguistic_analysis_blocks(blocks_df: pd.DataFrame) -> pd.DataFrame:
     df = blocks_df.copy()
 
     mask = (
-        (df["sb_is_shebang"] == False)
-        & (df["lh_has_legal_signal"] == False)
-        & (df["am_has_annotation_marker"] == False)
-        & (df["td_has_tooling_directive"] == False)
+        (df["sb_is_shebang"] == False) # noqa: E712
+        & (df["lh_has_legal_signal"] == False) # noqa: E712
+        & (df["am_has_annotation_marker"] == False) # noqa: E712
+        & (df["td_has_tooling_directive"] == False) # noqa: E712
     )
 
     return df.loc[mask].copy()

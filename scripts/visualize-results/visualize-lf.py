@@ -327,7 +327,7 @@ def main() -> None:
     args = parser.parse_args()
 
     subset = args.subset
-    repo_df = read_repo_linguistic_features(subset)
+    # repo_df = read_repo_linguistic_features(subset)
     group_df = read_group_linguistic_features(subset)
 
     out_path = make_punctuation_pattern_ratio_double_bar(group_df, subset)

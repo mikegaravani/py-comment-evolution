@@ -51,7 +51,7 @@ def _filter_file_index_for_subset(file_index_df: pd.DataFrame, subset: str) -> p
         else:
             raise KeyError("file_index.parquet must contain either 'repo' or 'name'")
 
-    df = df[df[subset_flag] == True].copy()
+    df = df[df[subset_flag] == True].copy()  # noqa: E712
     df = df[df["loc_total"] > 0].copy()
 
     return df
