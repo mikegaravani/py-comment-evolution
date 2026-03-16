@@ -1,0 +1,17 @@
+subset,repo,group,release,total_blocks,legal_blocks,legal_block_ratio
+core,build,new_2020s,1.4.0,54,3,0.05555555555555555
+core,coverage,old_2000s,3.0,116,1,0.008620689655172414
+core,ipython,old_2000s,0.10.1,3656,118,0.032275711159737416
+core,nose,old_2000s,0.11.1,484,1,0.002066115702479339
+core,pdm,new_2020s,2.26.0,499,4,0.008016032064128256
+core,pip,old_2000s,1.0.1,245,0,0.0
+core,pip-audit,new_2020s,2.9.0,152,0,0.0
+core,poetry-plugin-export,new_2020s,1.10.0,28,0,0.0
+core,pygments,old_2000s,1.0,963,2,0.0020768431983385254
+core,pytask,new_2020s,0.5.8,383,0,0.0
+core,rich,new_2020s,14.0.0,367,0,0.0
+core,scons,old_2000s,1.0.0,2610,244,0.09348659003831418
+core,setuptools,old_2000s,0.6c11,447,0,0.0
+core,textualize,new_2020s,1.0.0,1440,1,0.0006944444444444445
+core,typer,new_2020s,0.19.0,381,0,0.0
+core,virtualenv,old_2000s,1.4,115,0,0.0

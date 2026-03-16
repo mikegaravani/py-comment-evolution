@@ -152,6 +152,7 @@ def summarize_repo_census(file_inventory: pd.DataFrame, snapshots: list[Snapshot
                 "name", "group", "directory_id", "release", "release_date",
                 "n_files_total", "n_files_py",
                 "loc_total_all_text", "loc_total_py",
+                "n_files_py_core", "loc_py_core",
                 "n_files_py_tests", "loc_py_tests",
                 "n_files_py_vendor", "loc_py_vendor",
                 "n_files_encoding_error",
@@ -186,6 +187,10 @@ def summarize_repo_census(file_inventory: pd.DataFrame, snapshots: list[Snapshot
         loc_total_all_text = int(g.loc[g["is_text"], "loc_total"].fillna(0).sum())
         loc_total_py = int(g.loc[g["is_py"] & g["is_text"], "loc_total"].fillna(0).sum())
 
+        py_core_mask = g["is_py"] & ~g["is_test"] & ~g["is_vendor"] & ~g["is_docs"]
+        n_files_py_core = n_where(py_core_mask)
+        loc_py_core = int(g.loc[py_core_mask & g["is_text"], "loc_total"].fillna(0).sum())
+
         # Category splits (py only)
         n_files_py_tests = n_where(g["is_py"] & g["is_test"])
         loc_py_tests = int(g.loc[g["is_py"] & g["is_test"] & g["is_text"], "loc_total"].fillna(0).sum())
@@ -207,6 +212,8 @@ def summarize_repo_census(file_inventory: pd.DataFrame, snapshots: list[Snapshot
                 "n_files_py": n_files_py,
                 "loc_total_all_text": loc_total_all_text,
                 "loc_total_py": loc_total_py,
+                "n_files_py_core": n_files_py_core,
+                "loc_py_core": loc_py_core,
                 "n_files_py_tests": n_files_py_tests,
                 "loc_py_tests": loc_py_tests,
                 "n_files_py_vendor": n_files_py_vendor,
@@ -225,6 +232,8 @@ def summarize_repo_census(file_inventory: pd.DataFrame, snapshots: list[Snapshot
         "n_files_py",
         "loc_total_all_text",
         "loc_total_py",
+        "n_files_py_core",
+        "loc_py_core",
         "n_files_py_tests",
         "loc_py_tests",
         "n_files_py_vendor",
