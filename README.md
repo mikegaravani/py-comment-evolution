@@ -98,7 +98,7 @@ In my experience, it took Software Heritage about a week to provide the missing 
 For any request or inquiry, please contact me through my contact form on my personal website at [mikegaravani.com](https://mikegaravani.com/).
 Thanks :)
 
-# License
+## License
 
 The source code is licensed under the MIT License.
-The thesis document is licensed under CC BY 4.0.
+The thesis document is licensed under CC BY-NC-ND 4.0.
