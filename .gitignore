@@ -10,3 +10,5 @@ build/
 data/raw/
 data/processed/
 .env
+results/
+logs/
