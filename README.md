@@ -92,3 +92,13 @@ Software Heritage might not have all the repositories ready for download immedia
 The pipeline will stop and will return an error message that says to wait and try again later, when Software Heritage might have the missing repos ready to be fetched.
 
 In my experience, it took Software Heritage about a week to provide the missing repos.
+
+## Contacts
+
+For any request or inquiry, please contact me through my contact form on my personal website at [mikegaravani.com](https://mikegaravani.com/).
+Thanks :)
+
+# License
+
+The source code is licensed under the MIT License.
+The thesis document is licensed under CC BY 4.0.
